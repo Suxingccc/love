@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🍽️ 今天吃什么？</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #ffd6e0 0%, #ffc8d6 25%, #ffb3c6 50%, #ffd1dc 75%, #ffe4e9 100%);
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* 浮动爱心 */
+  .floating-hearts {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .heart {
+    position: absolute;
+    opacity: 0.35;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg) scale(1); opacity: 0.4; }
+    100% { transform: translateY(-100px) rotate(720deg) scale(0.5); opacity: 0; }
+  }
+
+  /* 主卡片 */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    border-radius: 32px;
+    padding: 32px 24px 36px;
+    max-width: 440px;
+    width: 92%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 80, 120, 0.25);
+    border: 2px solid rgba(255, 200, 215, 0.5);
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #d6336c;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #e8688a;
+    margin-bottom: 20px;
+  }
+
+  /* 转盘容器 */
+  .wheel-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50%;
+    box-shadow: 0 8px 32px rgba(255, 60, 100, 0.3);
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+  }
+  canvas:active {
+    box-shadow: 0 4px 16px rgba(255, 60, 100, 0.5);
+  }
+
+  /* 指针三角形 */
+  .pointer {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 30px solid #d6336c;
+    filter: drop-shadow(0 3px 6px rgba(214, 51, 108, 0.4));
+  }
+
+  /* 中心装饰 */
+  .center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    background: radial-gradient(circle at 35% 35%, #ff6b8a, #d6336c);
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(214, 51, 108, 0.4);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    pointer-events: none;
+  }
+
+  /* 按钮 */
+  .spin-btn {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 48px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 60, 100, 0.4);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+  .spin-btn:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255, 60, 100, 0.5); }
+  .spin-btn:active { transform: scale(0.96); }
+  .spin-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* 结果区域 */
+  .result {
+    margin-top: 16px;
+    min-height: 44px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #d6336c;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .result .emoji-big {
+    font-size: 28px;
+    animation: bounce 0.5s ease;
+  }
+
+  @keyframes bounce {
+    0% { transform: scale(0.3); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* 历史记录 */
+  .history-area {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(214, 51, 108, 0.2);
+  }
+  .history-label {
+    font-size: 12px;
+    color: #e8688a;
+    margin-bottom: 6px;
+  }
+  .history-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .history-tag {
+    background: rgba(255, 60, 100, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #d6336c;
+  }
+
+  /* 编辑选项 */
+  .edit-area {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(214, 51, 108, 0.2);
+  }
+  .edit-btn {
+    background: none;
+    border: 1.5px dashed #e8688a;
+    color: #e8688a;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .edit-btn:hover {
+    background: rgba(232, 104, 138, 0.1);
+    border-style: solid;
+  }
+
+  .edit-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+  }
+  .edit-overlay.show { display: flex; }
+
+  .edit-panel {
+    background: white;
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 88%;
+    max-width: 380px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: fadeInUp 0.3s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .edit-panel h3 {
+    color: #d6336c;
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .edit-panel textarea {
+    width: 100%;
+    height: 140px;
+    border: 2px solid #f0d0da;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    color: #444;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .edit-panel textarea:focus {
+    border-color: #e8688a;
+  }
+
+  .edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .edit-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-save {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: white;
+  }
+  .btn-save:hover { opacity: 0.9; }
+  .btn-cancel {
+    background: #f0f0f0;
+    color: #888;
+  }
+  .btn-cancel:hover { background: #e0e0e0; }
+</style>
+</head>
+<body>
+
+<div class="floating-hearts" id="hearts"></div>
+
+<div class="card">
+  <div class="title">🍽️ 今天吃什么？</div>
+  <div class="subtitle">宝贝转一下，让命运帮你做选择 💕</div>
+
+  <div class="wheel-wrapper">
+    <div class="pointer"></div>
+    <canvas id="wheelCanvas" width="600" height="600"></canvas>
+    <div class="center-dot">❤️</div>
+  </div>
+
+  <button class="spin-btn" id="spinBtn" onclick="spin()">🎯 转一下！</button>
+
+  <div class="result" id="result">🥰 等你来转哦～</div>
+
+  <div class="history-area" id="historyArea">
+    <div class="history-label">📋 历史选择</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <div class="edit-area">
+    <button class="edit-btn" onclick="showEditor()">✏️ 编辑选项</button>
+  </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div class="edit-overlay" id="editOverlay" onclick="hideEditor(event)">
+  <div class="edit-panel">
+    <h3>✏️ 编辑美食选项</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:10px;">每行一个，换行分隔</p>
+    <textarea id="optionEditor"></textarea>
+    <div class="edit-actions">
+      <button class="btn-cancel" onclick="hideEditor()">取消</button>
+      <button class="btn-save" onclick="saveOptions()">✅ 保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== 默认美食选项 =====
+  const DEFAULT_OPTIONS = [
+    '🔥 烧烤', '🍲 火锅', '🥩 烤肉', '🍚 拌饭',
+    '🍜 拉面', '🌮 卷饼', '🍕 披萨', '🥟 饺子',
+    '🍣 寿司', '🍗 炸鸡', '🥘 麻辣烫', '🌯 肉夹馍',
+    '🦐 海鲜', '🍝 意面', '🥪 三明治', '🥢 炒菜'
+  ];
+
+  let foodOptions = [...DEFAULT_OPTIONS];
+  let history = [];
+  let isSpinning = false;
+  let currentRotation = 0;
+
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx = canvas.getContext('2d');
+  const resultDiv = document.getElementById('result');
+
+  // 颜色方案（温暖的情侣配色）
+  const COLORS = [
+    '#FF6B8A', '#FF8A9E', '#FF9FB2', '#FF6F91',
+    '#FF9671', '#FFC75F', '#F9F871', '#FFC2D1',
+    '#FFACC7', '#FF8FAB', '#E88DB0', '#D47EA6',
+    '#FFB3C6', '#FF9FBB', '#FF85A2', '#FF7096'
+  ];
+
+  function drawWheel(rotation) {
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const r = Math.min(cx, cy) - 10;
+    const sliceAngle = (2 * Math.PI) / foodOptions.length;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // 外圈发光
+    const grad = ctx.createRadialGradient(cx, cy, r-5, cx, cy, r+5);
+    grad.addColorStop(0, 'rgba(255,150,180,0.2)');
+    grad.addColorStop(1, 'rgba(255,150,180,0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, r+5, 0, 2 * Math.PI);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    for (let i = 0; i < foodOptions.length; i++) {
+      const startAngle = rotation + i * sliceAngle;
+      const endAngle = startAngle + sliceAngle;
+
+      // 扇形
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = COLORS[i % COLORS.length];
+      ctx.fill();
+
+      // 边框
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // 文字（沿半径方向）
+      const midAngle = startAngle + sliceAngle / 2;
+      const textR = r * 0.62;
+      const tx = cx + textR * Math.cos(midAngle);
+      const ty = cy + textR * Math.sin(midAngle);
+
+      ctx.save();
+      ctx.translate(tx, ty);
+      ctx.rotate(midAngle + Math.PI / 2);
+
+      const label = foodOptions[i];
+      const emoji = label.match(/[\u{1F300}-\u{1FAFF}]/u) ? label.match(/[\u{1F300}-\u{1FAFF}]/u)[0] : '';
+      const text = label.replace(/[\u{1F300}-\u{1FAFF}]/gu, '').trim() || label;
+
+      ctx.font = 'bold ' + Math.max(11, Math.min(15, 20 - foodOptions.length)) + 'px PingFang SC, Microsoft YaHei, sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,0.25)';
+      ctx.shadowBlur = 3;
+      ctx.fillText(text, 0, -5);
+
+      if (emoji) {
+        ctx.font = '16px sans-serif';
+        ctx.fillText(emoji, 0, 16);
+      }
+
+      ctx.restore();
+    }
+
+    // 外圈描边
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(255,60,100,0.15)';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+  }
+
+  // 获取指针指向的选项
+  function getSelectedOption(rotation) {
+    const sliceAngle = (2 * Math.PI) / foodOptions.length;
+    // 指针在顶部（-π/2 方向）
+    const normalized = ((2 * Math.PI) - (rotation % (2 * Math.PI)) + Math.PI / 2) % (2 * Math.PI);
+    const index = Math.floor(normalized / sliceAngle);
+    return index % foodOptions.length;
+  }
+
+  function spin() {
+    if (isSpinning || foodOptions.length === 0) return;
+    isSpinning = true;
+    document.getElementById('spinBtn').disabled = true;
+    resultDiv.textContent = '🌀 转起来啦...';
+
+    // 随机旋转 5-8 圈 + 随机角度
+    const spins = (5 + Math.random() * 3) * 2 * Math.PI;
+    const randomAngle = Math.random() * 2 * Math.PI;
+    const targetRotation = currentRotation + spins + randomAngle;
+    const duration = 4000 + Math.random() * 1000;
+    const startTime = Date.now();
+    const startRotation = currentRotation;
+
+    function animate() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutBack 动画曲线
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      const eased = 1 + c3 * Math.pow(progress - 1, 3) + c1 * Math.pow(progress - 1, 2);
+
+      const current = startRotation + (targetRotation - startRotation) * eased;
+      currentRotation = current;
+      drawWheel(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        currentRotation = targetRotation;
+        const idx = getSelectedOption(targetRotation);
+        const selected = foodOptions[idx];
+        resultDiv.innerHTML = '<span class="emoji-big">' + (selected.match(/[\u{1F300}-\u{1FAFF}]/u) ? selected.match(/[\u{1F300}-\u{1FAFF}]/u)[0] : '🍽️') + '</span> ' + selected.replace(/[\u{1F300}-\u{1FAFF}]/gu, '').trim();
+        history.unshift(selected);
+        if (history.length > 8) history.pop();
+        renderHistory();
+        isSpinning = false;
+        document.getElementById('spinBtn').disabled = false;
+      }
+    }
+    animate();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    if (history.length === 0) {
+      list.innerHTML = '<span style="color:#ccc;font-size:13px;">还没有记录哦～</span>';
+      return;
+    }
+    list.innerHTML = history.map(h => '<span class="history-tag">' + h + '</span>').join('');
+  }
+
+  function showEditor() {
+    document.getElementById('optionEditor').value = foodOptions.join('\n');
+    document.getElementById('editOverlay').classList.add('show');
+  }
+
+  function hideEditor(e) {
+    if (e && e.target !== document.getElementById('editOverlay')) return;
+    document.getElementById('editOverlay').classList.remove('show');
+  }
+
+  function saveOptions() {
+    const text = document.getElementById('optionEditor').value.trim();
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length < 2) {
+      alert('至少需要 2 个选项哦～');
+      return;
+    }
+    foodOptions = lines;
+    // 重置转盘
+    currentRotation = 0;
+    drawWheel(0);
+    resultDiv.textContent = '✅ 选项已更新！转一下试试 🎯';
+    history = [];
+    renderHistory();
+    document.getElementById('editOverlay').classList.remove('show');
+  }
+
+  // 点击canvas也能转
+  canvas.addEventListener('click', spin);
+
+  // 生成背景爱心
+  function createHearts() {
+    const container = document.getElementById('hearts');
+    const emojis = ['❤️', '💕', '💗', '💖', '🌸', '🌹', '✨', '💝'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart';
+      el.textContent = emojis[i % emojis.length];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.fontSize = (12 + Math.random() * 18) + 'px';
+      el.style.animationDuration = (10 + Math.random() * 15) + 's';
+      el.style.animationDelay = (Math.random() * 20) + 's';
+      container.appendChild(el);
+    }
+  }
+
+  // 初始化
+  createHearts();
+  drawWheel(0);
+  renderHistory();
+</script>
+</body>
+</html>
