@@ -387,7 +387,7 @@
 
       // 文字（沿半径方向）
       const midAngle = startAngle + sliceAngle / 2;
-      const textR = r * 0.62;
+      const textR = r * 0.54;
       const tx = cx + textR * Math.cos(midAngle);
       const ty = cy + textR * Math.sin(midAngle);
 
@@ -399,7 +399,7 @@
       const emoji = label.match(/[\u{1F300}-\u{1FAFF}]/u) ? label.match(/[\u{1F300}-\u{1FAFF}]/u)[0] : '';
       const text = label.replace(/[\u{1F300}-\u{1FAFF}]/gu, '').trim() || label;
 
-      ctx.font = 'bold ' + Math.max(11, Math.min(15, 20 - foodOptions.length)) + 'px PingFang SC, Microsoft YaHei, sans-serif';
+      ctx.font = 'bold ' + Math.max(14, Math.min(20, 24 - foodOptions.length)) + 'px PingFang SC, Microsoft YaHei, sans-serif';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -408,7 +408,7 @@
       ctx.fillText(text, 0, -5);
 
       if (emoji) {
-        ctx.font = '16px sans-serif';
+        ctx.font = '20px sans-serif';
         ctx.fillText(emoji, 0, 16);
       }
 
