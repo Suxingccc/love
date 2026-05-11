@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -418,7 +418,7 @@ function renderDates() {
   }
 }
 renderDates();
-document.getElementById('lastDateText').textContent = getLastDate();
+document.getElementById('lastDateText').innerHTML = getLastDate();
 
 var currentId = null;
 
@@ -427,10 +427,10 @@ function openModal(id) {
   for (var i = 0; i < dateOptions.length; i++) {
     if (dateOptions[i].id === id) {
       var opt = dateOptions[i];
-      document.getElementById('modalEmoji').textContent = opt.emoji;
+      document.getElementById('modalEmoji').innerHTML = opt.emoji;
       document.getElementById('modalTitle').textContent = '&#30830;&#23450;&#36873;&#12302;' + opt.name + '&#12303;&#21527;&#65311;';
-      document.getElementById('modalSub').textContent = opt.msg;
-      document.getElementById('modalStats').textContent = getStats(id);
+      document.getElementById('modalSub').innerHTML = opt.msg;
+      document.getElementById('modalStats').innerHTML = getStats(id);
       document.getElementById('modalOverlay').classList.add('show');
       break;
     }
@@ -448,20 +448,20 @@ function confirmChoice() {
   if (!opt) return;
   saveChoice(currentId, opt.name);
   closeModal();
-  document.getElementById('resultEmoji').textContent = opt.emoji;
+  document.getElementById('resultEmoji').innerHTML = opt.emoji;
   document.getElementById('resultTitle').textContent = '&#22826;&#22909;&#21862;&#65281;&#128149;';
   document.getElementById('resultSub').textContent = '&#20170;&#22825;&#25105;&#20204;&#23601;&#21435;&#12302;' + opt.name + '&#12303;&#21543;&#65281;';
-  document.getElementById('resultMsg').textContent = activityMessages[currentId] || opt.msg;
+  document.getElementById('resultMsg').innerHTML = activityMessages[currentId] || opt.msg;
   document.getElementById('resultOverlay').classList.add('show');
   launchConfetti();
-  document.getElementById('lastDateText').textContent = getLastDate();
-  document.getElementById('quoteBar').textContent = opt.quote || randomQuote();
+  document.getElementById('lastDateText').innerHTML = getLastDate();
+  document.getElementById('quoteBar').innerHTML = opt.quote || randomQuote();
   currentId = null;
 }
 
 function closeResult() {
   document.getElementById('resultOverlay').classList.remove('show');
-  document.getElementById('quoteBar').textContent = randomQuote();
+  document.getElementById('quoteBar').innerHTML = randomQuote();
 }
 
 function surpriseMe() {
@@ -489,7 +489,7 @@ function launchConfetti() {
 
 setInterval(function() {
   var qb = document.getElementById('quoteBar');
-  if (qb) qb.textContent = randomQuote();
+  if (qb) qb.innerHTML = randomQuote();
 }, 30000);
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
