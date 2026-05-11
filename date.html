@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>💕 今天去哪里约会</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #ffd6e0 0%, #ffb3c6 25%, #ffc8d6 50%, #ff9eb5 75%, #ffb3c6 100%);
+    background-size: 400% 400%;
+    animation: gradientFlow 12s ease infinite;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+  }
+
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .floating-elements {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; overflow: hidden; z-index: 0;
+  }
+  .float-item {
+    position: absolute;
+    font-size: 20px;
+    animation: floatDown linear infinite;
+    opacity: 0.35;
+  }
+  @keyframes floatDown {
+    0% { transform: translateY(-80px) rotate(0deg) scale(1); opacity: 0.5; }
+    100% { transform: translateY(105vh) rotate(720deg) scale(0.3); opacity: 0; }
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 520px;
+    width: 100%;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .header-icon {
+    font-size: 56px;
+    display: block;
+    margin-bottom: 8px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .header h1 {
+    font-size: 28px;
+    color: #d6336c;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(214, 51, 108, 0.15);
+  }
+  .header p {
+    font-size: 15px;
+    color: #e8688a;
+    margin-top: 6px;
+  }
+
+  .last-date-banner {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #d6336c;
+    border: 1.5px solid rgba(255, 180, 200, 0.4);
+    box-shadow: 0 4px 16px rgba(255, 80, 120, 0.08);
+  }
+  .last-date-banner span {
+    font-weight: 700;
+  }
+
+  .quote-bar {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #c95a7a;
+    border-left: 3px solid #ff6b8a;
+    transition: all 0.5s ease;
+  }
+
+  .section-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #d6336c;
+    margin: 8px 0 14px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 107, 138, 0.4), transparent);
+  }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .date-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid rgba(255, 200, 215, 0.4);
+    box-shadow: 0 4px 16px rgba(255, 80, 120, 0.06);
+    position: relative;
+    overflow: hidden;
+  }
+  .date-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b8a, #ff9671);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .date-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 107, 138, 0.5);
+    box-shadow: 0 12px 32px rgba(255, 80, 120, 0.18);
+  }
+  .date-card:hover::before {
+    transform: scaleX(1);
+  }
+  .date-card:active {
+    transform: scale(0.95);
+  }
+
+  .date-card .emoji {
+    font-size: 38px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .date-card .name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 4px;
+  }
+  .date-card .desc {
+    font-size: 12px;
+    color: #999;
+    line-height: 1.4;
+  }
+  .date-card .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+  .badge-hot { background: #ffe0e6; color: #d6336c; }
+  .badge-new { background: #e0f4ff; color: #2a8dcf; }
+  .badge-calm { background: #e0fce0; color: #2a9d2a; }
+
+  .surprise-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(255, 60, 100, 0.35);
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .surprise-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(255, 60, 100, 0.45);
+  }
+  .surprise-btn:active {
+    transform: scale(0.97);
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    color: #e8688a;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px;
+    margin-bottom: 20px;
+    transition: color 0.3s;
+  }
+  .back-link:hover { color: #d6336c; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .modal-overlay.show { display: flex; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-box {
+    background: #fff;
+    border-radius: 28px;
+    padding: 36px 28px 28px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  @keyframes modalSlideUp {
+    from { transform: translateY(40px) scale(0.9); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .modal-emoji { font-size: 64px; margin-bottom: 10px; }
+  .modal-title { font-size: 22px; font-weight: 700; color: #d6336c; margin-bottom: 6px; }
+  .modal-sub { font-size: 15px; color: #e8688a; margin-bottom: 20px; line-height: 1.6; }
+  .modal-stats { font-size: 13px; color: #aaa; margin-bottom: 20px; }
+
+  .modal-btns { display: flex; gap: 12px; justify-content: center; }
+  .modal-btn {
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .modal-btn.confirm {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,60,100,0.3);
+  }
+  .modal-btn.confirm:hover { transform: scale(1.05); }
+  .modal-btn.cancel {
+    background: #f0f0f0;
+    color: #888;
+  }
+  .modal-btn.cancel:hover { background: #e0e0e0; }
+
+  .result-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .result-overlay.show { display: flex; }
+
+  .result-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,107,138,0.92), rgba(255,150,113,0.92));
+    animation: fadeIn 0.5s ease;
+  }
+
+  .result-box {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    animation: modalSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 20px;
+  }
+  .result-emoji { font-size: 80px; display: block; margin-bottom: 12px; animation: bounce 1.5s ease-in-out infinite; }
+  .result-title { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+  .result-sub { font-size: 18px; color: rgba(255,255,255,0.9); margin-bottom: 8px; }
+  .result-msg { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 24px; max-width: 320px; line-height: 1.6; }
+  .result-btn {
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-size: 17px;
+    font-weight: 600;
+    border: 2px solid rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .result-btn:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.05);
+  }
+
+  .confetti {
+    position: fixed;
+    pointer-events: none;
+    z-index: 300;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @media (max-width: 400px) {
+    .date-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .date-card { padding: 16px 12px; }
+    .date-card .emoji { font-size: 30px; }
+    .date-card .name { font-size: 14px; }
+    .header h1 { font-size: 24px; }
+    .modal-box { padding: 28px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-elements" id="floatContainer"></div>
+
+<div class="container">
+  <div class="header">
+    <span class="header-icon">💕</span>
+    <h1>今天去哪里约会？</h1>
+    <p>亲爱的，选一个你想去的地方吧 ✨</p>
+  </div>
+
+  <div class="last-date-banner" id="lastDateBanner">
+    💌 上次约会：<span id="lastDateText">还没有约会记录哦~</span>
+  </div>
+
+  <div class="quote-bar" id="quoteBar">🌹 和你在一起的每一天，都是最好的约会</div>
+
+  <div class="section-label">💫 约会选择</div>
+
+  <div class="date-grid" id="dateGrid"></div>
+
+  <button class="surprise-btn" onclick="surpriseMe()">🎲 随便选一个</button>
+
+  <a href="index.html" class="back-link">💕 返回首页</a>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-emoji" id="modalEmoji">💕</div>
+    <div class="modal-title" id="modalTitle">确定选这个吗？</div>
+    <div class="modal-sub" id="modalSub">选好了我们就去约会吧~</div>
+    <div class="modal-stats" id="modalStats"></div>
+    <div class="modal-btns">
+      <button class="modal-btn confirm" onclick="confirmChoice()">✅ 就这个！</button>
+      <button class="modal-btn cancel" onclick="closeModal()">再看看</button>
+    </div>
+  </div>
+</div>
+
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-bg"></div>
+  <div class="result-box">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-title" id="resultTitle">太好啦！</div>
+    <div class="result-sub" id="resultSub">今天我们就去...</div>
+    <div class="result-msg" id="resultMsg">和最喜欢的人一起，做什么都开心 💕</div>
+    <button class="result-btn" onclick="closeResult()">💕 再选一次</button>
+  </div>
+</div>
+
+<script>
+  const dateOptions = [
+    { id: 'stayhome', emoji: '🏠', name: '宅家约会', desc: '窝在家看电影·做饭·打游戏', badge: { text: '💕 超温馨', 'class': 'badge-hot' }, msg: '只要和你在一起，窝在家就是全世界最幸福的事 🥰', quote: '有你的地方，就是最好的约会地点' },
+    { id: 'movie', emoji: '🎬', name: '看电影', desc: '最新大片·爆米花·可乐', badge: { text: '🔥 经典', 'class': 'badge-hot' }, msg: '黑灯瞎火的电影院，最适合偷偷牵你的手啦 🎬💕', quote: '电影好不好看不重要，重要的是身边的人是你' },
+    { id: 'shopping', emoji: '🛍️', name: '逛街购物', desc: '手牵手逛商场·买买买', badge: { text: '✨ 推荐', 'class': 'badge-new' }, msg: '想给你买最好看的衣服，看你试穿时开心的样子 👗💕', quote: '陪你逛街三小时不喊累，这就是真爱' },
+    { id: 'dinner', emoji: '🍽️', name: '吃大餐', desc: '浪漫餐厅·烛光晚餐', badge: { text: '👨‍🍳 精致', 'class': 'badge-hot' }, msg: '美食和爱情，都是这世上最治愈的东西 🍷✨', quote: '和你吃饭，每一顿都是烛光晚餐' },
+    { id: 'amusement', emoji: '🎡', name: '游乐园', desc: '摩天轮·过山车·棉花糖', badge: { text: '🎢 刺激', 'class': 'badge-new' }, msg: '在摩天轮最高点许愿，希望我们能一直在一起 🎡💫', quote: '坐过山车时抓紧我的手，一辈子都不放开' },
+    { id: 'park', emoji: '🌸', name: '公园散步', desc: '散步拍照·感受大自然', badge: { text: '🌿 惬意', 'class': 'badge-calm' }, msg: '牵着你的手在公园里慢慢走，连风都是甜的 🌸🍃', quote: '最美的风景不是花，是看花的你' },
+    { id: 'games', emoji: '🎮', name: '打游戏', desc: '一起开黑·双人小游戏', badge: { text: '🎯 欢乐', 'class': 'badge-new' }, msg: '赢了你夸我厉害，输了你笑我菜，怎样都开心 🎮😝', quote: '游戏可以输，但你不能输' },
+    { id: 'tea', emoji: '☕', name: '下午茶', desc: '安静咖啡厅·甜品·聊天', badge: { text: '🍰 甜', 'class': 'badge-calm' }, msg: '和你面对面坐着，什么都不说也觉得美好 ☕🌸', quote: '和你聊天的时间，永远过得太快' },
+    { id: 'ktv', emoji: '🎤', name: 'KTV唱歌', desc: '一起当歌王歌后·嗨唱', badge: { text: '🎵 开心', 'class': 'badge-new' }, msg: '唱一首情歌给你听，歌词都是我想对你说的话 🎤💕', quote: '你是我的主打歌，循环播放一辈子' },
+    { id: 'trip', emoji: '🌊', name: '短途旅行', desc: '周边城市·说走就走', badge: { text: '✈️ 浪漫', 'class': 'badge-hot' }, msg: '和你一起去看不一样的风景，每一帧都是最美的回忆 🌊🌅', quote: '世界那么大，我想和你一起去看看' }
+  ];
+
+  const activityMessages = {
+    stayhome: '今天就在家腻在一起吧~ 我负责做饭，你负责说爱我 🥰🍳',
+    movie: '爆米花我买，票我买，你只负责靠在我肩膀上 🎬💕',
+    shopping: '今天你想买什么我都陪你！你负责美，我负责买单 🛍️💖',
+    dinner: '定了你最喜欢的餐厅，今晚只准负责吃和笑 🍷✨',
+    amusement: '在摩天轮最高点我会对你说一句话... 你猜是什么？🎡💕',
+    park: '带你去一个超美的公园，保证你疯狂拍照！📸🌸',
+    games: '我准备好被你虐了！不过赢了的人要请吃夜宵哦 🎮😆',
+    tea: '找一家有猫的咖啡厅，边撸猫边看你，治愈一整天 ☕🐱',
+    ktv: '我要唱《告白气球》给你听！你负责当我的最佳听众 🎤🎵',
+    trip: '我来做攻略，你带上好心情，我们出发吧！🌊✈️'
+  };
+
+  const quotes = [
+    '🌹 和你在一起的每一天，都是最好的约会', '💕 想和你一起做很多很多无聊的事',
+    '✨ 你是我平淡生活里的光', '🌸 只要有你在，去哪都是蜜月旅行',
+    '💖 和你一起浪费的时间，才是最珍贵的时光', '🌟 你是我的「刚刚好」——刚好喜欢，刚好合适',
+    '💗 遇见你之后，每天都想谈恋爱', '🌺 你的笑容，是我这辈子最想守护的东西',
+    '🦋 喜欢你这件事，我打算坚持一辈子', '💫 世界很大，但我的世界里有你就够了'
+  ];
+
+  function randomQuote() { return quotes[Math.floor(Math.random() * quotes.length)]; }
+
+  function createFloatElements() {
+    const container = document.getElementById('floatContainer');
+    const items = ['💕', '✨', '🌸', '💖', '🌟', '💗', '🌺', '🦋'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.className = 'float-item';
+      el.textContent = items[i % items.length];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.fontSize = (12 + Math.random() * 20) + 'px';
+      el.style.animationDuration = (10 + Math.random() * 18) + 's';
+      el.style.animationDelay = (Math.random() * 20) + 's';
+      container.appendChild(el);
+    }
+  }
+  createFloatElements();
+
+  function getHistory() { try { return JSON.parse(localStorage.getItem('dateHistory') || '{}'); } catch { return {}; } }
+
+  function saveChoice(id, name) {
+    const history = getHistory();
+    if (!history[id]) history[id] = { name: name, count: 0, lastDate: null };
+    history[id].count++;
+    history[id].lastDate = new Date().toISOString();
+    localStorage.setItem('dateHistory', JSON.stringify(history));
+    localStorage.setItem('lastDate', JSON.stringify({ id: id, name: name, time: new Date().toISOString() }));
+  }
+
+  function getLastDate() {
+    try {
+      const last = JSON.parse(localStorage.getItem('lastDate'));
+      if (last && last.name) {
+        const days = Math.floor((Date.now() - new Date(last.time)) / 86400000);
+        if (days === 0) return '刚刚选了 ' + last.name + ' 💕';
+        if (days === 1) return '昨天选了 ' + last.name + ' 💕';
+        return days + ' 天前选了 ' + last.name;
+      }
+    } catch {}
+    return '还没有约会记录哦~';
+  }
+
+  function getStats(id) {
+    const history = getHistory();
+    if (history[id] && history[id].count > 0) {
+      return '这是第 ' + history[id].count + ' 次选这个啦 ' + '💕'.repeat(Math.min(history[id].count, 5));
+    }
+    return '第一次选这个呢！✨';
+  }
+
+  function renderDates() {
+    const grid = document.getElementById('dateGrid');
+    grid.innerHTML = '';
+    dateOptions.forEach(opt => {
+      const card = document.createElement('div');
+      card.className = 'date-card';
+      card.dataset.id = opt.id;
+      card.innerHTML = '<span class="emoji">' + opt.emoji + '</span><div class="name">' + opt.name + '</div><div class="desc">' + opt.desc + '</div><span class="badge ' + opt.badge.class + '">' + opt.badge.text + '</span>';
+      card.addEventListener('click', function() { openModal(opt.id); });
+      grid.appendChild(card);
+    });
+  }
+  renderDates();
+  document.getElementById('lastDateText').textContent = getLastDate();
+
+  let currentId = null;
+
+  function openModal(id) {
+    currentId = id;
+    const opt = dateOptions.find(function(d) { return d.id === id; });
+    if (!opt) return;
+    document.getElementById('modalEmoji').textContent = opt.emoji;
+    document.getElementById('modalTitle').textContent = '确定选「' + opt.name + '」吗？';
+    document.getElementById('modalSub').textContent = opt.msg;
+    document.getElementById('modalStats').textContent = getStats(id);
+    document.getElementById('modalOverlay').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); currentId = null; }
+
+  function confirmChoice() {
+    if (!currentId) return;
+    const opt = dateOptions.find(function(d) { return d.id === currentId; });
+    if (!opt) return;
+    saveChoice(currentId, opt.name);
+    closeModal();
+    document.getElementById('resultEmoji').textContent = opt.emoji;
+    document.getElementById('resultTitle').textContent = '太好啦！💕';
+    document.getElementById('resultSub').textContent = '今天我们就去「' + opt.name + '」吧！';
+    document.getElementById('resultMsg').textContent = activityMessages[currentId] || opt.msg;
+    document.getElementById('resultOverlay').classList.add('show');
+    launchConfetti();
+    document.getElementById('lastDateText').textContent = getLastDate();
+    document.getElementById('quoteBar').textContent = opt.quote || randomQuote();
+    currentId = null;
+  }
+
+  function closeResult() {
+    document.getElementById('resultOverlay').classList.remove('show');
+    document.getElementById('quoteBar').textContent = randomQuote();
+  }
+
+  function surpriseMe() {
+    const random = dateOptions[Math.floor(Math.random() * dateOptions.length)];
+    openModal(random.id);
+  }
+
+  function launchConfetti() {
+    const emojis = ['💕', '✨', '🌸', '💖', '🌟', '🎉', '💗', '🌺', '🦋', '🎊'];
+    for (let i = 0; i < 40; i++) {
+      (function(idx) {
+        setTimeout(function() {
+          const el = document.createElement('div');
+          el.className = 'confetti';
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          el.style.left = Math.random() * 100 + 'vw';
+          el.style.fontSize = (14 + Math.random() * 24) + 'px';
+          el.style.animationDuration = (2 + Math.random() * 3) + 's';
+          document.body.appendChild(el);
+          setTimeout(function() { el.remove(); }, 5000);
+        }, idx * 60);
+      })(i);
+    }
+  }
+
+  setInterval(function() {
+    var qb = document.getElementById('quoteBar');
+    if (qb) qb.textContent = randomQuote();
+  }, 30000);
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeModal(); closeResult(); }
+  });
+</script>
+</body>
+</html>
