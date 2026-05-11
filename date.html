@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>💕 今天去哪里约会</title>
+<title>❤️ 今天去哪里约会</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -12,258 +12,69 @@
     background: linear-gradient(135deg, #ffd6e0 0%, #ffb3c6 25%, #ffc8d6 50%, #ff9eb5 75%, #ffb3c6 100%);
     background-size: 400% 400%;
     animation: gradientFlow 12s ease infinite;
-    display: flex;
-    justify-content: center;
-    padding: 24px 16px;
-    position: relative;
+    display: flex; justify-content: center; padding: 24px 16px; position: relative;
   }
-  @keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .floating-elements {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none; overflow: hidden; z-index: 0;
-  }
-  .float-item {
-    position: absolute;
-    font-size: 20px;
-    animation: floatDown linear infinite;
-    opacity: 0.35;
-  }
-  @keyframes floatDown {
-    0% { transform: translateY(-80px) rotate(0deg) scale(1); opacity: 0.5; }
-    100% { transform: translateY(105vh) rotate(720deg) scale(0.3); opacity: 0; }
-  }
-  .container {
-    position: relative; z-index: 1;
-    max-width: 520px;
-    width: 100%;
-  }
+  @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  .floating-elements { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .float-item { position: absolute; font-size: 20px; animation: floatDown linear infinite; opacity: 0.35; }
+  @keyframes floatDown { 0% { transform: translateY(-80px) rotate(0deg) scale(1); opacity: 0.5; } 100% { transform: translateY(105vh) rotate(720deg) scale(0.3); opacity: 0; } }
+  .container { position: relative; z-index: 1; max-width: 520px; width: 100%; }
   .header { text-align: center; margin-bottom: 28px; }
-  .header-icon {
-    font-size: 56px;
-    display: block;
-    margin-bottom: 8px;
-    animation: bounce 2s ease-in-out infinite;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  .header h1 {
-    font-size: 28px;
-    color: #d6336c;
-    font-weight: 700;
-    text-shadow: 0 2px 8px rgba(214, 51, 108, 0.15);
-  }
-  .header p {
-    font-size: 15px;
-    color: #e8688a;
-    margin-top: 6px;
-  }
-  .last-date-banner {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(8px);
-    border-radius: 16px;
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 14px;
-    color: #d6336c;
-    border: 1.5px solid rgba(255, 180, 200, 0.4);
-    box-shadow: 0 4px 16px rgba(255, 80, 120, 0.08);
-  }
+  .header-icon { font-size: 56px; display: block; margin-bottom: 8px; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .header h1 { font-size: 28px; color: #d6336c; font-weight: 700; text-shadow: 0 2px 8px rgba(214, 51, 108, 0.15); }
+  .header p { font-size: 15px; color: #e8688a; margin-top: 6px; }
+  .last-date-banner { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); border-radius: 16px; padding: 14px 18px; margin-bottom: 20px; text-align: center; font-size: 14px; color: #d6336c; border: 1.5px solid rgba(255, 180, 200, 0.4); box-shadow: 0 4px 16px rgba(255, 80, 120, 0.08); }
   .last-date-banner span { font-weight: 700; }
-  .quote-bar {
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    padding: 10px 16px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 13px;
-    color: #c95a7a;
-    border-left: 3px solid #ff6b8a;
-    transition: all 0.5s ease;
-  }
-  .section-label {
-    font-size: 16px;
-    font-weight: 600;
-    color: #d6336c;
-    margin: 8px 0 14px 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(255, 107, 138, 0.4), transparent);
-  }
-  .date-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .date-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 20px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    border: 2px solid rgba(255, 200, 215, 0.4);
-    box-shadow: 0 4px 16px rgba(255, 80, 120, 0.06);
-    position: relative;
-    overflow: hidden;
-  }
-  .date-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #ff6b8a, #ff9671);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-  .date-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    border-color: rgba(255, 107, 138, 0.5);
-    box-shadow: 0 12px 32px rgba(255, 80, 120, 0.18);
-  }
+  .quote-bar { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px); border-radius: 12px; padding: 10px 16px; margin-bottom: 20px; text-align: center; font-size: 13px; color: #c95a7a; border-left: 3px solid #ff6b8a; transition: all 0.5s ease; }
+  .section-label { font-size: 16px; font-weight: 600; color: #d6336c; margin: 8px 0 14px 4px; display: flex; align-items: center; gap: 8px; }
+  .section-label::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, rgba(255, 107, 138, 0.4), transparent); }
+  .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  .date-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-radius: 20px; padding: 20px 16px; text-align: center; cursor: pointer; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid rgba(255, 200, 215, 0.4); box-shadow: 0 4px 16px rgba(255, 80, 120, 0.06); position: relative; overflow: hidden; }
+  .date-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ff6b8a, #ff9671); transform: scaleX(0); transition: transform 0.3s ease; }
+  .date-card:hover { transform: translateY(-4px) scale(1.02); border-color: rgba(255, 107, 138, 0.5); box-shadow: 0 12px 32px rgba(255, 80, 120, 0.18); }
   .date-card:hover::before { transform: scaleX(1); }
   .date-card:active { transform: scale(0.95); }
   .date-card .emoji { font-size: 38px; display: block; margin-bottom: 8px; }
   .date-card .name { font-size: 16px; font-weight: 700; color: #444; margin-bottom: 4px; }
   .date-card .desc { font-size: 12px; color: #999; line-height: 1.4; }
-  .date-card .badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-top: 8px;
-  }
+  .date-card .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-top: 8px; }
   .badge-hot { background: #ffe0e6; color: #d6336c; }
   .badge-new { background: #e0f4ff; color: #2a8dcf; }
   .badge-calm { background: #e0fce0; color: #2a9d2a; }
-  .surprise-btn {
-    display: block; width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
-    color: #fff; border: none; border-radius: 50px;
-    font-size: 18px; font-weight: 600; cursor: pointer;
-    box-shadow: 0 6px 24px rgba(255, 60, 100, 0.35);
-    transition: all 0.3s ease;
-    margin-bottom: 24px;
-  }
-  .surprise-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 32px rgba(255, 60, 100, 0.45);
-  }
+  .surprise-btn { display: block; width: 100%; padding: 16px; background: linear-gradient(135deg, #ff6b8a, #ff3b6f); color: #fff; border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; box-shadow: 0 6px 24px rgba(255, 60, 100, 0.35); transition: all 0.3s ease; margin-bottom: 24px; }
+  .surprise-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255, 60, 100, 0.45); }
   .surprise-btn:active { transform: scale(0.97); }
-  .back-link {
-    display: block; text-align: center;
-    color: #e8688a; text-decoration: none;
-    font-size: 14px; padding: 8px; margin-bottom: 20px;
-  }
+  .back-link { display: block; text-align: center; color: #e8688a; text-decoration: none; font-size: 14px; padding: 8px; margin-bottom: 20px; }
   .back-link:hover { color: #d6336c; }
-  .modal-overlay {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
-    z-index: 100;
-    justify-content: center; align-items: center;
-    padding: 20px;
-    animation: fadeIn 0.3s ease;
-  }
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 100; justify-content: center; align-items: center; padding: 20px; animation: fadeIn 0.3s ease; }
   .modal-overlay.show { display: flex; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .modal-box {
-    background: #fff;
-    border-radius: 28px;
-    padding: 36px 28px 28px;
-    max-width: 380px; width: 100%;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  @keyframes modalSlideUp {
-    from { transform: translateY(40px) scale(0.9); opacity: 0; }
-    to { transform: translateY(0) scale(1); opacity: 1; }
-  }
+  .modal-box { background: #fff; border-radius: 28px; padding: 36px 28px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.15); animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes modalSlideUp { from { transform: translateY(40px) scale(0.9); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
   .modal-emoji { font-size: 64px; margin-bottom: 10px; }
   .modal-title { font-size: 22px; font-weight: 700; color: #d6336c; margin-bottom: 6px; }
   .modal-sub { font-size: 15px; color: #e8688a; margin-bottom: 20px; line-height: 1.6; }
   .modal-stats { font-size: 13px; color: #aaa; margin-bottom: 20px; }
   .modal-btns { display: flex; gap: 12px; justify-content: center; }
-  .modal-btn {
-    padding: 12px 32px; border-radius: 50px;
-    font-size: 16px; font-weight: 600; border: none; cursor: pointer;
-    transition: all 0.3s;
-  }
-  .modal-btn.confirm {
-    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(255,60,100,0.3);
-  }
+  .modal-btn { padding: 12px 32px; border-radius: 50px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; }
+  .modal-btn.confirm { background: linear-gradient(135deg, #ff6b8a, #ff3b6f); color: #fff; box-shadow: 0 4px 16px rgba(255,60,100,0.3); }
   .modal-btn.confirm:hover { transform: scale(1.05); }
   .modal-btn.cancel { background: #f0f0f0; color: #888; }
   .modal-btn.cancel:hover { background: #e0e0e0; }
-  .result-overlay {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 200;
-    justify-content: center; align-items: center;
-    padding: 20px;
-  }
+  .result-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 200; justify-content: center; align-items: center; padding: 20px; }
   .result-overlay.show { display: flex; }
-  .result-bg {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(255,107,138,0.92), rgba(255,150,113,0.92));
-    animation: fadeIn 0.5s ease;
-  }
-  .result-box {
-    position: relative; z-index: 1;
-    text-align: center;
-    animation: modalSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    padding: 20px;
-  }
+  .result-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,107,138,0.92), rgba(255,150,113,0.92)); animation: fadeIn 0.5s ease; }
+  .result-box { position: relative; z-index: 1; text-align: center; animation: modalSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); padding: 20px; }
   .result-emoji { font-size: 80px; display: block; margin-bottom: 12px; animation: bounce 1.5s ease-in-out infinite; }
   .result-title { font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.1); }
   .result-sub { font-size: 18px; color: rgba(255,255,255,0.9); margin-bottom: 8px; }
   .result-msg { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 24px; max-width: 320px; line-height: 1.6; }
-  .result-btn {
-    padding: 14px 40px; border-radius: 50px;
-    font-size: 17px; font-weight: 600;
-    border: 2px solid rgba(255,255,255,0.6);
-    background: rgba(255,255,255,0.2);
-    color: #fff; cursor: pointer; transition: all 0.3s;
-    backdrop-filter: blur(4px);
-  }
+  .result-btn { padding: 14px 40px; border-radius: 50px; font-size: 17px; font-weight: 600; border: 2px solid rgba(255,255,255,0.6); background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; transition: all 0.3s; backdrop-filter: blur(4px); }
   .result-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.05); }
-  .confetti {
-    position: fixed; pointer-events: none; z-index: 300;
-    animation: confettiFall linear forwards;
-  }
-  @keyframes confettiFall {
-    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
-  @media (max-width: 400px) {
-    .date-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .date-card { padding: 16px 12px; }
-    .date-card .emoji { font-size: 30px; }
-    .date-card .name { font-size: 14px; }
-    .header h1 { font-size: 24px; }
-    .modal-box { padding: 28px 20px 24px; }
-  }
+  .confetti { position: fixed; pointer-events: none; z-index: 300; animation: confettiFall linear forwards; }
+  @keyframes confettiFall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+  @media (max-width: 400px) { .date-grid { gap: 10px; } .date-card { padding: 16px 12px; } .date-card .emoji { font-size: 30px; } .date-card .name { font-size: 14px; } .header h1 { font-size: 24px; } }
 </style>
 </head>
 <body>
@@ -272,29 +83,29 @@
 
 <div class="container">
   <div class="header">
-    <span class="header-icon">💕</span>
+    <span class="header-icon">❤️</span>
     <h1>今天去哪里约会？</h1>
     <p>亲爱的，选一个你想去的地方吧 ✨</p>
   </div>
 
   <div class="last-date-banner" id="lastDateBanner">
-    💌 上次约会：<span id="lastDateText">还没有约会记录哦~</span>
+    U0001f48c 上次约会：<span id="lastDateText">还没有约会记录哦~</span>
   </div>
 
-  <div class="quote-bar" id="quoteBar">🌹 和你在一起的每一天，都是最好的约会</div>
+  <div class="quote-bar" id="quoteBar">U0001f339 和你在一起的每一天，都是最好的约会</div>
 
-  <div class="section-label">💫 约会选择</div>
+  <div class="section-label">U0001f4ab 约会选择</div>
 
   <div class="date-grid" id="dateGrid"></div>
 
-  <button class="surprise-btn" onclick="surpriseMe()">🎲 随便选一个</button>
+  <button class="surprise-btn" onclick="surpriseMe()">U0001f3b2 随便选一个</button>
 
-  <a href="index.html" class="back-link">💕 返回首页</a>
+  <a href="index.html" class="back-link">❤️ 返回首页</a>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-emoji" id="modalEmoji">💕</div>
+    <div class="modal-emoji" id="modalEmoji">❤️</div>
     <div class="modal-title" id="modalTitle">确定选这个吗？</div>
     <div class="modal-sub" id="modalSub">选好了我们就去约会吧~</div>
     <div class="modal-stats" id="modalStats"></div>
@@ -308,117 +119,119 @@
 <div class="result-overlay" id="resultOverlay">
   <div class="result-bg"></div>
   <div class="result-box">
-    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <span class="result-emoji" id="resultEmoji">U0001f389</span>
     <div class="result-title" id="resultTitle">太好啦！</div>
     <div class="result-sub" id="resultSub">今天我们就去...</div>
-    <div class="result-msg" id="resultMsg">和最喜欢的人一起，做什么都开心 💕</div>
-    <button class="result-btn" onclick="closeResult()">💕 再选一次</button>
+    <div class="result-msg" id="resultMsg">和最喜欢的人一起，做什么都开心 ❤️</div>
+    <button class="result-btn" onclick="closeResult()">❤️ 再选一次</button>
   </div>
 </div>
 
 <script>
 const dateOptions = [
-  {id:'stayhome', emoji:'🏠', name:'宅家约会', desc:'窝在家看电影·做饭·打游戏', badge:{text:'💕 超温馨', c:'badge-hot'}, msg:'只要和你在一起，窝在家就是全世界最幸福的事', quote:'有你的地方，就是最好的约会地点'},
-  {id:'movie', emoji:'🎬', name:'看电影', desc:'最新大片·爆米花·可乐', badge:{text:'🔥 经典', c:'badge-hot'}, msg:'黑灯瞎火的电影院，最适合偷偷牵你的手了', quote:'电影好不好看不重要，重要的是身边的人是你'},
-  {id:'shopping', emoji:'🛍', name:'逛街购物', desc:'手牵手逛商场·买买买', badge:{text:'✨ 推荐', c:'badge-new'}, msg:'想给你买最好看的衣服，看你试穿时开心的样子', quote:'陪你逛街三小时不喊累，这就是真爱'},
-  {id:'dinner', emoji:'🍴', name:'吃大餐', desc:'浪漫餐厅·烛光晚餐', badge:{text:'👖 精致', c:'badge-hot'}, msg:'美食和爱情，都是这世上最治愈的东西', quote:'和你吃饭，每一顿都是烛光晚餐'},
-  {id:'amusement', emoji:'🎡', name:'游乐园', desc:'摩天轮·过山车·棉花糖', badge:{text:'🎲 刺激', c:'badge-new'}, msg:'在摩天轮最高点许愿，希望我们能一直在一起', quote:'坐过山车时抓紧我的手，一辈子不放开'},
-  {id:'park', emoji:'🌸', name:'公园散步', desc:'散步拍照·感受大自然', badge:{text:'🌱 惬意', c:'badge-calm'}, msg:'牵着你的手在公园里慢慢走，连风都是甜的', quote:'最美的风景不是花，是看花的你'},
-  {id:'games', emoji:'🎮', name:'打游戏', desc:'一起开黑·双人小游戏', badge:{text:'🎯 欢乐', c:'badge-new'}, msg:'赢了你夸我厉害，输了你笑我菜，怎样都开心', quote:'游戏可以输，但你不能输'},
-  {id:'tea', emoji:'☕', name:'下午茶', desc:'安静咖啡厅·甜品·聊天', badge:{text:'🍞 甜', c:'badge-calm'}, msg:'和你面对面坐着，什么也不说也觉得美好', quote:'和你聊天的时间，永远过得太快'},
-  {id:'ktv', emoji:'🎤', name:'KTV唱歌', desc:'一起当歌王歌后·嗨唱', badge:{text:'🎵 开心', c:'badge-new'}, msg:'唱一首情歌给你听，歌词都是我想对你说的话', quote:'你是我的主打歌，循环播放一辈子'},
-  {id:'trip', emoji:'🌊', name:'短途旅行', desc:'周边城市·说走就走', badge:{text:'✈ 浪漫', c:'badge-hot'}, msg:'和你一起去看不一样的风景，每一幅都是最美的回忆', quote:'世界那么大，我想和你一起去看看'}
+  {id:"stayhome", emoji:"\ud83c\udfe0", name:"\u5b85\u5bb6\u7ea6\u4f1a", desc:"\u7a9d\u5728\u5bb6\u770b\u7535\u5f71\u00b7\u505a\u996d\u00b7\u6253\u6e38\u620f", badge:{text:"\u2764\ufe0f \u8d85\u6e29\u99a8", c:"badge-hot"}, msg:"\u53ea\u8981\u548c\u4f60\u5728\u4e00\u8d77\uff0c\u7a9d\u5728\u5bb6\u5c31\u662f\u5168\u4e16\u754c\u6700\u5e78\u798f\u7684\u4e8b", quote:"\u6709\u4f60\u7684\u5730\u65b9\uff0c\u5c31\u662f\u6700\u597d\u7684\u7ea6\u4f1a\u5730\u70b9"},
+  {id:"movie", emoji:"\ud83c\udfac", name:"\u770b\u7535\u5f71", desc:"\u6700\u65b0\u5927\u7247\u00b7\u7206\u7c73\u82b1\u00b7\u53ef\u4e50", badge:{text:"\ud83d\udd25 \u7ecf\u5178", c:"badge-hot"}, msg:"\u9ed1\u706f\u778e\u706b\u7684\u7535\u5f71\u9662\uff0c\u6700\u9002\u5408\u5077\u5077\u7275\u4f60\u7684\u624b\u4e86", quote:"\u7535\u5f71\u597d\u4e0d\u597d\u770b\u4e0d\u91cd\u8981\uff0c\u91cd\u8981\u7684\u662f\u8eab\u8fb9\u7684\u4eba\u662f\u4f60"},
+  {id:"shopping", emoji:"\ud83d\uded2", name:"\u901b\u8857\u8d2d\u7269", desc:"\u624b\u7275\u624b\u901b\u5546\u573a\u00b7\u4e70\u4e70\u4e70", badge:{text:"\u2728 \u63a8\u8350", c:"badge-new"}, msg:"\u60f3\u7ed9\u4f60\u4e70\u6700\u597d\u770b\u7684\u8863\u670d\uff0c\u770b\u4f60\u8bd5\u7a7f\u65f6\u5f00\u5fc3\u7684\u6837\u5b50", quote:"\u966a\u4f60\u901b\u8857\u4e09\u5c0f\u65f6\u4e0d\u558a\u7d2f\uff0c\u8fd9\u5c31\u662f\u771f\u7231"},
+  {id:"dinner", emoji:"\ud83c\udf74", name:"\u5403\u5927\u53c2", desc:"\u6d6a\u6f2b\u9910\u5385\u00b7\u70db\u5149\u665a\u9910", badge:{text:"\U0001f456 \u7cbe\u81f4", c:"badge-hot"}, msg:"\u7f8e\u98df\u548c\u7231\u60c5\uff0c\u90fd\u662f\u8fd9\u4e16\u4e0a\u6700\u6cbb\u6108\u7684\u4e1c\u897f", quote:"\u548c\u4f60\u5403\u996d\uff0c\u6bcf\u4e00\u987f\u90fd\u662f\u70db\u5149\u665a\u9910"},
+  {id:"amusement", emoji:"\ud83c\udfa1", name:"\u6e38\u4e50\u56ed", desc:"\u6469\u5929\u8f6e\u00b7\u8fc7\u5c71\u8f66\u00b7\u68c9\u82b1\u7cd6", badge:{text:"\ud83c\udfb2 \u523a\u6fc0", c:"badge-new"}, msg:"\u5728\u6469\u5929\u8f6e\u6700\u9ad8\u70b9\u8bb8\u613f\uff0c\u5e0c\u671b\u6211\u4eec\u80fd\u4e00\u76f4\u5728\u4e00\u8d77", quote:"\u5750\u8fc7\u5c71\u8f66\u65f6\u6293\u7d27\u6211\u7684\u624b\uff0c\u4e00\u8f88\u5b50\u4e0d\u653e\u5f00"},
+  {id:"park", emoji:"\ud83c\udf38", name:"\u516c\u56ed\u6563\u6b65", desc:"\u6563\u6b65\u62cd\u7167\u00b7\u611f\u53d7\u5927\u81ea\u7136", badge:{text:"\ud83c\udf31 \u60ec\u610f", c:"badge-calm"}, msg:"\u7275\u7740\u4f60\u7684\u624b\u5728\u516c\u56ed\u91cc\u6162\u6162\u8d70\uff0c\u8fde\u98ce\u90fd\u662f\u751c\u7684", quote:"\u6700\u7f8e\u7684\u98ce\u666f\u4e0d\u662f\u82b1\uff0c\u662f\u770b\u82b1\u7684\u4f60"},
+  {id:"games", emoji:"\ud83c\udfae", name:"\u6253\u6e38\u620f", desc:"\u4e00\u8d77\u5f00\u9ed1\u00b7\u53cc\u4eba\u5c0f\u6e38\u620f", badge:{text:"\ud83c\udfaf \u6b22\u4e50", c:"badge-new"}, msg:"\u8d62\u4e86\u4f60\u5938\u6211\u5389\u5bb3\uff0c\u8f93\u4e86\u4f60\u7b11\u6211\u83dc\uff0c\u600e\u6837\u90fd\u5f00\u5fc3", quote:"\u6e38\u620f\u53ef\u4ee5\u8f93\uff0c\u4f46\u4f60\u4e0d\u80fd\u8f93"},
+  {id:"tea", emoji:"\u2615", name:"\u4e0b\u5348\u8336", desc:"\u5b89\u9759\u5496\u5561\u5385\u00b7\u751c\u54c1\u00b7\u804a\u5929", badge:{text:"\ud83c\udf5e \u751c", c:"badge-calm"}, msg:"\u548c\u4f60\u9762\u5bf9\u9762\u5750\u7740\uff0c\u4ec0\u4e48\u4e5f\u4e0d\u8bf4\u4e5f\u89c9\u5f97\u7f8e\u597d", quote:"\u548c\u4f60\u804a\u5929\u7684\u65f6\u95f4\uff0c\u6c38\u8fdc\u8fc7\u5f97\u592a\u5feb"},
+  {id:"ktv", emoji:"\ud83c\udfa4", name:"KTV\u5531\u6b4c", desc:"\u4e00\u8d77\u5f53\u6b4c\u738b\u6b4c\u540e\u00b7\u55e8\u5531", badge:{text:"\ud83c\udfb5 \u5f00\u5fc3", c:"badge-new"}, msg:"\u5531\u4e00\u9996\u60c5\u6b4c\u7ed9\u4f60\u542c\uff0c\u6b4c\u8bcd\u90fd\u662f\u6211\u60f3\u5bf9\u4f60\u8bf4\u7684\u8bdd", quote:"\u4f60\u662f\u6211\u7684\u4e3b\u6253\u6b4c\uff0c\u5faa\u73af\u64ad\u653e\u4e00\u8f88\u5b50"},
+  {id:"trip", emoji:"\ud83c\udf0a", name:"\u77ed\u9014\u65c5\u884c", desc:"\u5468\u8fb9\u57ce\u5e02\u00b7\u8bf4\u8d70\u5c31\u8d70", badge:{text:"\u2708 \u6d6a\u6f2b", c:"badge-hot"}, msg:"\u548c\u4f60\u4e00\u8d77\u53bb\u770b\u4e0d\u4e00\u6837\u7684\u98ce\u666f\uff0c\u6bcf\u4e00\u5e45\u90fd\u662f\u6700\u7f8e\u7684\u56de\u5fc6", quote:"\u4e16\u754c\u90a3\u4e48\u5927\uff0c\u6211\u60f3\u548c\u4f60\u4e00\u8d77\u53bb\u770b\u770b"}
 ];
 
 const activityMessages = {
-  stayhome:'今天就在家腐败在一起吧~ 我负责做饭，你负责说爱我',
-  movie:'爆米花我买，票我买，你只负责靠在我肩膀上',
-  shopping:'今天你想买什么我都陪你！你负责美，我负责买单',
-  dinner:'订了你最喜欢的餐厅，今晚只准负责吃和笑',
-  amusement:'在摩天轮最高点我会对你说一句话... 你猜是什么？',
-  park:'带你去一个超美的公园，保证你疯狂拍照！',
-  games:'我准备好被你虐了！不过赢了的人要请吃夜宵哦',
-  tea:'找一家有猫的咖啡厅，边撸猫边看你，治愈一整天',
-  ktv:'我要唱《告白气球》给你听！你负责当我的最佳听众',
-  trip:'我来做攻略，你带上好心情，我们出发吧！'
+  stayhome:"\u4eca\u5929\u5c31\u5728\u5bb6\u8150\u8d25\u5728\u4e00\u8d77\u5427~ \u6211\u8d1f\u8d23\u505a\u996d\uff0c\u4f60\u8d1f\u8d23\u8bf4\u7231\u6211",
+  movie:"\u7206\u7c73\u82b1\u6211\u4e70\uff0c\u7968\u6211\u4e70\uff0c\u4f60\u53ea\u8d1f\u8d23\u9760\u5728\u6211\u80a9\u8180\u4e0a",
+  shopping:"\u4eca\u5929\u4f60\u60f3\u4e70\u4ec0\u4e48\u6211\u90fd\u966a\u4f60\uff01\u4f60\u8d1f\u8d23\u7f8e\uff0c\u6211\u8d1f\u8d23\u4e70\u5355",
+  dinner:"\u8ba2\u4e86\u4f60\u6700\u559c\u6b22\u7684\u83dc\u5385\uff0c\u4eca\u665a\u53ea\u51c6\u8d1f\u8d23\u5403\u548c\u7b11",
+  amusement:"\u5728\u6469\u5929\u8f6e\u6700\u9ad8\u70b9\u6211\u4f1a\u5bf9\u4f60\u8bf4\u4e00\u53e5\u8bdd... \u4f60\u731c\u662f\u4ec0\u4e48\uff1f",
+  park:"\u5e26\u4f60\u53bb\u4e00\u4e2a\u8d85\u7f8e\u7684\u516c\u56ed\uff0c\u4fdd\u8bc1\u4f60\u75af\u72c2\u62cd\u7167\uff01",
+  games:"\u6211\u51c6\u5907\u597d\u88ab\u4f60\u8650\u4e86\uff01\u4e0d\u8fc7\u8d62\u4e86\u7684\u4eba\u8981\u8bf7\u5403\u591c\u5bb5\u54e6",
+  tea:"\u627e\u4e00\u5bb6\u6709\u732b\u7684\u5496\u5561\u5385\uff0c\u8fb9\u64c2\u732b\u8fb9\u770b\u4f60\uff0c\u6cbb\u6108\u4e00\u6574\u5929",
+  ktv:"\u6211\u8981\u5531\u300a\u544a\u767d\u6c14\u7403\u300b\u7ed9\u4f60\u542c\uff01\u4f60\u8d1f\u8d23\u5f53\u6211\u7684\u6700\u4f73\u542c\u4f17",
+  trip:"\u6211\u6765\u505a\u653b\u7565\uff0c\u4f60\u5e26\u4e0a\u597d\u5fc3\u60c5\uff0c\u6211\u4eec\u51fa\u53d1\u5427\uff01"
 };
 
 const quotes = [
-  '🌹 和你在一起的每一天，都是最好的约会',
-  '💕 想和你一起做很多很多无聊的事',
-  '✨ 你是我平淡生活里的光',
-  '🌸 只要有你在，去哪都是蜜月旅行',
-  '💘 和你一起浪费的时间，才是最珍贵的时光',
-  '🌟 你是我的「刚刚好」——刚好喜欢，刚好合适',
-  '💓 遇见你之后，每天都想谈恋爱',
-  '🌊 你的笑容，是我这辈子最想守护的东西',
-  '💋 喜欢你这件事，我打算坚持一辈子的',
-  '💫 世界很大，但我的世界里有你就够了'
+  "\ud83c\udf39 \u548c\u4f60\u5728\u4e00\u8d77\u7684\u6bcf\u4e00\u5929\uff0c\u90fd\u662f\u6700\u597d\u7684\u7ea6\u4f1a",
+  "\u2764\ufe0f \u60f3\u548c\u4f60\u4e00\u8d77\u505a\u5f88\u591a\u5f88\u591a\u65e0\u804a\u7684\u4e8b",
+  "\u2728 \u4f60\u662f\u6211\u5e73\u6de1\u751f\u6d3b\u91cc\u7684\u5149",
+  "\ud83c\udf38 \u53ea\u8981\u6709\u4f60\u5728\uff0c\u53bb\u54ea\u90fd\u662f\u871c\u6708\u65c5\u884c",
+  "\ud83d\udc98 \u548c\u4f60\u4e00\u8d77\u6d6a\u8d39\u7684\u65f6\u95f4\uff0c\u624d\u662f\u6700\u73cd\u8d35\u7684\u65f6\u5149",
+  "\ud83c\udf1f \u4f60\u662f\u6211\u7684\u300c\u521a\u521a\u597d\u300d\u2014\u2014\u521a\u597d\u559c\u6b22\uff0c\u521a\u597d\u5408\u9002",
+  "\ud83d\udc93 \u9047\u89c1\u4f60\u4e4b\u540e\uff0c\u6bcf\u5929\u90fd\u60f3\u8c08\u604b\u7231",
+  "\ud83c\udf0a \u4f60\u7684\u7b11\u5bb9\uff0c\u662f\u6211\u8fd9\u8f88\u5b50\u6700\u60f3\u5b88\u62a4\u7684\u4e1c\u897f",
+  "\ud83d\udc8b \u559c\u6b22\u4f60\u8fd9\u4ef6\u4e8b\uff0c\u6211\u6253\u7b97\u575a\u6301\u4e00\u8f88\u5b50\u7684",
+  "\ud83d\udcab \u4e16\u754c\u5f88\u5927\uff0c\u4f46\u6211\u7684\u4e16\u754c\u91cc\u6709\u4f60\u5c31\u591f\u4e86"
 ];
 
 function randomQuote() { return quotes[Math.floor(Math.random() * quotes.length)]; }
 
 function createFloatElements() {
-  const container = document.getElementById('floatContainer');
-  const items = ['💕','✨','🌸','💘','🌟','💓','🌊','💋'];
+  const container = document.getElementById("floatContainer");
+  const items = ["\u2764\ufe0f","\u2728","\ud83c\udf38","\ud83d\udc98","\ud83c\udf1f","\ud83d\udc93","\ud83c\udf0a","\ud83d\udc8b"];
   for (let i = 0; i < 20; i++) {
-    const el = document.createElement('div');
-    el.className = 'float-item';
+    const el = document.createElement("div");
+    el.className = "float-item";
     el.textContent = items[i % items.length];
-    el.style.left = Math.random() * 100 + '%';
-    el.style.fontSize = (12 + Math.random() * 20) + 'px';
-    el.style.animationDuration = (10 + Math.random() * 18) + 's';
-    el.style.animationDelay = (Math.random() * 20) + 's';
+    el.style.left = Math.random() * 100 + "%";
+    el.style.fontSize = (12 + Math.random() * 20) + "px";
+    el.style.animationDuration = (10 + Math.random() * 18) + "s";
+    el.style.animationDelay = (Math.random() * 20) + "s";
     container.appendChild(el);
   }
 }
 createFloatElements();
 
-function getHistory() { try { return JSON.parse(localStorage.getItem('dateHistory') || '{}'); } catch(e) { return {}; } }
+function getHistory() { try { return JSON.parse(localStorage.getItem("dateHistory") || "{}"); } catch(e) { return {}; } }
 
 function saveChoice(id, name) {
   const h = getHistory();
   if (!h[id]) h[id] = {name, count: 0, lastDate: null};
   h[id].count++;
   h[id].lastDate = new Date().toISOString();
-  localStorage.setItem('dateHistory', JSON.stringify(h));
-  localStorage.setItem('lastDate', JSON.stringify({id, name, time: new Date().toISOString()}));
+  localStorage.setItem("dateHistory", JSON.stringify(h));
+  localStorage.setItem("lastDate", JSON.stringify({id, name, time: new Date().toISOString()}));
 }
 
 function getLastDate() {
   try {
-    const last = JSON.parse(localStorage.getItem('lastDate'));
+    const last = JSON.parse(localStorage.getItem("lastDate"));
     if (last && last.name) {
       const days = Math.floor((Date.now() - new Date(last.time)) / 86400000);
-      if (days === 0) return '刚刚选了 ' + last.name + ' 💕';
-      if (days === 1) return '昨天选了 ' + last.name + ' 💕';
-      return days + ' 天前选了 ' + last.name;
+      if (days === 0) return "\u521a\u521a\u9009\u4e86 " + last.name + " \u2764\ufe0f";
+      if (days === 1) return "\u6628\u5929\u9009\u4e86 " + last.name + " \u2764\ufe0f";
+      return days + " \u5929\u524d\u9009\u4e86 " + last.name;
     }
   } catch(e) {}
-  return '还没有约会记录哦~';
+  return "\u8fd8\u6ca1\u6709\u7ea6\u4f1a\u8bb0\u5f55\u54e6~";
 }
 
 function getStats(id) {
   const h = getHistory();
   if (h[id] && h[id].count > 0) {
-    return '这是第 ' + h[id].count + ' 次选这个啦 ' + '💕'.repeat(Math.min(h[id].count, 5));
+    let hearts = "";
+    for (let i = 0; i < Math.min(h[id].count, 5); i++) hearts += "\u2764\ufe0f";
+    return "\u8fd9\u662f\u7b2c " + h[id].count + " \u6b21\u9009\u8fd9\u4e2a\u5566 " + hearts;
   }
-  return '第一次选这个呢！✨';
+  return "\u7b2c\u4e00\u6b21\u9009\u8fd9\u4e2a\u5462\uff01\u2728";
 }
 
 function renderDates() {
-  const grid = document.getElementById('dateGrid');
-  grid.innerHTML = '';
+  const grid = document.getElementById("dateGrid");
+  grid.innerHTML = "";
   for (const opt of dateOptions) {
-    const card = document.createElement('div');
-    card.className = 'date-card';
-    card.innerHTML = '<span class="emoji">' + opt.emoji + '</span><div class="name">' + opt.name + '</div><div class="desc">' + opt.desc + '</div><span class="badge ' + opt.badge.c + '">' + opt.badge.text + '</span>';
-    card.addEventListener('click', () => openModal(opt.id));
+    const card = document.createElement("div");
+    card.className = "date-card";
+    card.innerHTML = "<span class=\"emoji\">" + opt.emoji + "</span><div class=\"name\">" + opt.name + "</div><div class=\"desc\">" + opt.desc + "</div><span class=\"badge " + opt.badge.c + "\">" + opt.badge.text + "</span>";
+    card.addEventListener("click", () => openModal(opt.id));
     grid.appendChild(card);
   }
 }
 renderDates();
-document.getElementById('lastDateText').textContent = getLastDate();
+document.getElementById("lastDateText").innerHTML = getLastDate();
 
 let currentId = null;
 
@@ -426,15 +239,15 @@ function openModal(id) {
   currentId = id;
   const opt = dateOptions.find(o => o.id === id);
   if (!opt) return;
-  document.getElementById('modalEmoji').textContent = opt.emoji;
-  document.getElementById('modalTitle').textContent = '确定选【' + opt.name + '】吗？';
-  document.getElementById('modalSub').textContent = opt.msg;
-  document.getElementById('modalStats').textContent = getStats(id);
-  document.getElementById('modalOverlay').classList.add('show');
+  document.getElementById("modalEmoji").textContent = opt.emoji;
+  document.getElementById("modalTitle").innerHTML = "\u786e\u5b9a\u9009\u3010" + opt.name + "\u3011\u5417\uff1f";
+  document.getElementById("modalSub").innerHTML = opt.msg;
+  document.getElementById("modalStats").innerHTML = getStats(id);
+  document.getElementById("modalOverlay").classList.add("show");
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('show');
+  document.getElementById("modalOverlay").classList.remove("show");
   currentId = null;
 }
 
@@ -444,20 +257,20 @@ function confirmChoice() {
   if (!opt) return;
   saveChoice(currentId, opt.name);
   closeModal();
-  document.getElementById('resultEmoji').textContent = opt.emoji;
-  document.getElementById('resultTitle').textContent = '太好啦！💕';
-  document.getElementById('resultSub').textContent = '今天我们就去【' + opt.name + '】吧！';
-  document.getElementById('resultMsg').textContent = activityMessages[currentId] || opt.msg;
-  document.getElementById('resultOverlay').classList.add('show');
+  document.getElementById("resultEmoji").textContent = opt.emoji;
+  document.getElementById("resultTitle").innerHTML = "\u592a\u597d\u5566\uff01\u2764\ufe0f";
+  document.getElementById("resultSub").innerHTML = "\u4eca\u5929\u6211\u4eec\u5c31\u53bb\u3010" + opt.name + "\u3011\u5427\uff01";
+  document.getElementById("resultMsg").innerHTML = activityMessages[currentId] || opt.msg;
+  document.getElementById("resultOverlay").classList.add("show");
   launchConfetti();
-  document.getElementById('lastDateText').textContent = getLastDate();
-  document.getElementById('quoteBar').textContent = opt.quote || randomQuote();
+  document.getElementById("lastDateText").innerHTML = getLastDate();
+  document.getElementById("quoteBar").innerHTML = opt.quote || randomQuote();
   currentId = null;
 }
 
 function closeResult() {
-  document.getElementById('resultOverlay').classList.remove('show');
-  document.getElementById('quoteBar').textContent = randomQuote();
+  document.getElementById("resultOverlay").classList.remove("show");
+  document.getElementById("quoteBar").innerHTML = randomQuote();
 }
 
 function surpriseMe() {
@@ -466,15 +279,15 @@ function surpriseMe() {
 }
 
 function launchConfetti() {
-  const emojis = ['💕','✨','🌸','💘','🌟','🎉','💓','🌊','💋','🎊'];
+  const emojis = ["\u2764\ufe0f","\u2728","\ud83c\udf38","\ud83d\udc98","\ud83c\udf1f","\ud83c\udf89","\ud83d\udc93","\ud83c\udf0a","\ud83d\udc8b","\ud83c\udf8a"];
   for (let i = 0; i < 40; i++) {
     setTimeout(() => {
-      const el = document.createElement('div');
-      el.className = 'confetti';
+      const el = document.createElement("div");
+      el.className = "confetti";
       el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.fontSize = (14 + Math.random() * 24) + 'px';
-      el.style.animationDuration = (2 + Math.random() * 3) + 's';
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = (14 + Math.random() * 24) + "px";
+      el.style.animationDuration = (2 + Math.random() * 3) + "s";
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 5000);
     }, i * 60);
@@ -482,16 +295,16 @@ function launchConfetti() {
 }
 
 setInterval(() => {
-  const qb = document.getElementById('quoteBar');
-  if (qb) qb.textContent = randomQuote();
+  const qb = document.getElementById("quoteBar");
+  if (qb) qb.innerHTML = randomQuote();
 }, 30000);
 
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
+document.getElementById("modalOverlay").addEventListener("click", function(e) {
   if (e.target === e.currentTarget) closeModal();
 });
 
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeModal(); closeResult(); }
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") { closeModal(); closeResult(); }
 });
 </script>
 </body>
