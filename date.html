@@ -1,9 +1,9 @@
-﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>&#128149; &#20170;&#22825;&#21435;&#21738;&#37324;&#32422;&#20250;</title>
+<title>💕 今天去哪里约会</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -272,35 +272,35 @@
 
 <div class="container">
   <div class="header">
-    <span class="header-icon">&#128149;</span>
-    <h1>&#20170;&#22825;&#21435;&#21738;&#37324;&#32422;&#20250;&#65311;</h1>
-    <p>&#20146;&#29233;&#30340;&#65292;&#36873;&#19968;&#20010;&#20320;&#24819;&#21435;&#30340;&#22320;&#26041;&#21543; &#10024;</p>
+    <span class="header-icon">💕</span>
+    <h1>今天去哪里约会？</h1>
+    <p>亲爱的，选一个你想去的地方吧 ✨</p>
   </div>
 
   <div class="last-date-banner" id="lastDateBanner">
-    &#128140; &#19978;&#27425;&#32422;&#20250;&#65306;<span id="lastDateText">&#36824;&#27809;&#26377;&#32422;&#20250;&#35760;&#24405;&#21734;~</span>
+    💌 上次约会：<span id="lastDateText">还没有约会记录哦~</span>
   </div>
 
-  <div class="quote-bar" id="quoteBar">&#127803; &#21644;&#20320;&#22312;&#19968;&#36215;&#30340;&#27599;&#19968;&#22825;&#65292;&#37117;&#26159;&#26368;&#22909;&#30340;&#32422;&#20250;</div>
+  <div class="quote-bar" id="quoteBar">🌹 和你在一起的每一天，都是最好的约会</div>
 
-  <div class="section-label">&#10087; &#32422;&#20250;&#36873;&#25321;</div>
+  <div class="section-label">💫 约会选择</div>
 
   <div class="date-grid" id="dateGrid"></div>
 
-  <button class="surprise-btn" onclick="surpriseMe()">&#127922; &#38543;&#20415;&#36873;&#19968;&#20010;</button>
+  <button class="surprise-btn" onclick="surpriseMe()">🎲 随便选一个</button>
 
-  <a href="index.html" class="back-link">&#128149; &#36820;&#22238;&#39318;&#39029;</a>
+  <a href="index.html" class="back-link">💕 返回首页</a>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-emoji" id="modalEmoji">&#128149;</div>
-    <div class="modal-title" id="modalTitle">&#30830;&#23450;&#36873;&#36825;&#20010;&#21527;&#65311;</div>
-    <div class="modal-sub" id="modalSub">&#36873;&#22909;&#20102;&#25105;&#20204;&#23601;&#21435;&#32422;&#20250;&#21543;~</div>
+    <div class="modal-emoji" id="modalEmoji">💕</div>
+    <div class="modal-title" id="modalTitle">确定选这个吗？</div>
+    <div class="modal-sub" id="modalSub">选好了我们就去约会吧~</div>
     <div class="modal-stats" id="modalStats"></div>
     <div class="modal-btns">
-      <button class="modal-btn confirm" onclick="confirmChoice()">&#9989; &#23601;&#36825;&#20010;&#65281;</button>
-      <button class="modal-btn cancel" onclick="closeModal()">&#20877;&#30475;&#30475;</button>
+      <button class="modal-btn confirm" onclick="confirmChoice()">✅ 就这个！</button>
+      <button class="modal-btn cancel" onclick="closeModal()">再看看</button>
     </div>
   </div>
 </div>
@@ -308,61 +308,61 @@
 <div class="result-overlay" id="resultOverlay">
   <div class="result-bg"></div>
   <div class="result-box">
-    <span class="result-emoji" id="resultEmoji">&#127881;</span>
-    <div class="result-title" id="resultTitle">&#22826;&#22909;&#21862;&#65281;</div>
-    <div class="result-sub" id="resultSub">&#20170;&#22825;&#25105;&#20204;&#23601;&#21435;...</div>
-    <div class="result-msg" id="resultMsg">&#21644;&#26368;&#21916;&#27426;&#30340;&#20154;&#19968;&#36215;&#65292;&#20570;&#20160;&#20040;&#37117;&#24320;&#24515; &#128149;</div>
-    <button class="result-btn" onclick="closeResult()">&#128149; &#20877;&#36873;&#19968;&#27425;</button>
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-title" id="resultTitle">太好啦！</div>
+    <div class="result-sub" id="resultSub">今天我们就去...</div>
+    <div class="result-msg" id="resultMsg">和最喜欢的人一起，做什么都开心 💕</div>
+    <button class="result-btn" onclick="closeResult()">💕 再选一次</button>
   </div>
 </div>
 
 <script>
-var dateOptions = [
-  {id:'stayhome',emoji:'&#127968;',name:'&#23429;&#23478;&#32422;&#20250;',desc:'&#31389;&#22312;&#23478;&#30475;&#30005;&#24433;.&#20570;&#39277;.&#25171;&#28216;&#25103;',badge:{text:'&#128149; &#36229;&#28201;&#39336;',c:'badge-hot'},msg:'&#21482;&#35201;&#21644;&#20320;&#22312;&#19968;&#36215;&#65292;&#31389;&#22312;&#23478;&#23601;&#26159;&#20840;&#19990;&#30028;&#26368;&#24184;&#31119;&#30340;&#20107;',quote:'&#26377;&#20320;&#30340;&#22320;&#26041;&#65292;&#23601;&#26159;&#26368;&#22909;&#30340;&#32422;&#20250;&#22320;&#28857;'},
-  {id:'movie',emoji:'&#127916;',name:'&#30475;&#30005;&#24433;',desc:'&#26368;&#26032;&#22823;&#29255;.&#29190;&#31859;&#33457;.&#21487;&#20048;',badge:{text:'&#128293; &#32463;&#20856;',c:'badge-hot'},msg:'&#40657;&#28783;&#20405;&#28779;&#30340;&#30005;&#24433;&#38498;&#65292;&#26368;&#36866;&#21512;&#20599;&#20599;&#29301;&#20320;&#30340;&#25163;&#20102;',quote:'&#30005;&#24433;&#22909;&#19981;&#22909;&#30475;&#19981;&#37325;&#35201;&#65292;&#37325;&#35201;&#30340;&#26159;&#36523;&#36793;&#30340;&#20154;&#26159;&#20320;'},
-  {id:'shopping',emoji:'&#128717;',name:'&#36891;&#34903;&#36141;&#29289;',desc:'&#25163;&#29282;&#25163;&#36891;&#21830;&#22330;.&#20080;&#20080;&#20080;',badge:{text:'&#10024; &#25512;&#33616;',c:'badge-new'},msg:'&#24819;&#32473;&#20320;&#20080;&#26368;&#22909;&#30475;&#30340;&#34915;&#26381;&#65292;&#30475;&#20320;&#35797;&#31359;&#26102;&#24320;&#24515;&#30340;&#26679;&#23376;',quote:'&#38506;&#20320;&#36891;&#34903;&#19977;&#23567;&#26102;&#19981;&#21898;&#32047;&#65292;&#36825;&#23601;&#26159;&#30495;&#29233;'},
-  {id:'dinner',emoji:'&#127860;',name:'&#21507;&#22823;&#21442;',desc:'&#28010;&#28459;&#33756;&#21381;.&#28821;&#20809;&#26202;&#39184;',badge:{text:'&#128096; &#31934;&#33268;',c:'badge-hot'},msg:'&#32654;&#39135;&#21644;&#29233;&#24773;&#65292;&#37117;&#26159;&#36825;&#19990;&#19978;&#26368;&#27835;&#24840;&#30340;&#19996;&#35199;',quote:'&#21644;&#20320;&#21507;&#39277;&#65292;&#27599;&#19968;&#39039;&#37117;&#26159;&#28821;&#20809;&#26202;&#39184;'},
-  {id:'amusement',emoji:'&#127937;',name:'&#28216;&#20048;&#22253;',desc:'&#25705;&#22825;&#36718;.&#36807;&#23665;&#36710;.&#26825;&#33457;&#31958;',badge:{text:'&#127922; &#21050;&#28608;',c:'badge-new'},msg:'&#22312;&#25705;&#22825;&#36718;&#26368;&#39640;&#28857;&#35768;&#24895;&#65292;&#24076;&#26395;&#25105;&#20204;&#33021;&#19968;&#30452;&#22312;&#19968;&#36215;',quote:'&#22352;&#36807;&#23665;&#36710;&#26102;&#25235;&#32039;&#25105;&#30340;&#25163;&#65292;&#19968;&#36744;&#23376;&#37117;&#19981;&#25918;&#24320;'},
-  {id:'park',emoji:'&#127800;',name:'&#20844;&#22253;&#25955;&#27493;',desc:'&#25955;&#27493;&#25293;&#29031;.&#24863;&#21463;&#22823;&#33258;&#28982;',badge:{text:'&#127811; &#24742;&#24847;',c:'badge-calm'},msg:'&#29301;&#30528;&#20320;&#30340;&#25163;&#22312;&#20844;&#22253;&#37324;&#24930;&#24930;&#36208;&#65292;&#36830;&#39118;&#37117;&#26159;&#29980;&#30340;',quote:'&#26368;&#32654;&#30340;&#39118;&#26223;&#19981;&#26159;&#33457;&#65292;&#26159;&#30475;&#33457;&#30340;&#20320;'},
-  {id:'games',emoji:'&#127918;',name:'&#25171;&#28216;&#25103;',desc:'&#19968;&#36215;&#24320;&#40657;.&#21452;&#20154;&#23567;&#28216;&#25103;',badge:{text:'&#127919; &#27426;&#20048;',c:'badge-new'},msg:'&#36194;&#20102;&#20320;&#22840;&#25105;&#21385;&#23475;&#65292;&#36755;&#20102;&#20320;&#31505;&#25105;&#33756;&#65292;&#24590;&#26679;&#37117;&#24320;&#24515;',quote:'&#28216;&#25103;&#21487;&#20197;&#36755;&#65292;&#20294;&#20320;&#19981;&#33021;&#36755;'},
-  {id:'tea',emoji:'&#9749;',name:'&#19979;&#21320;&#33590;',desc:'&#23433;&#38745;&#21654;&#21857;&#21381;.&#29980;&#21697;.&#32842;&#22825;',badge:{text:'&#127856; &#29980;',c:'badge-calm'},msg:'&#21644;&#20320;&#38754;&#23545;&#38754;&#22352;&#30528;&#65292;&#20160;&#20040;&#37117;&#19981;&#35828;&#20063;&#35273;&#24471;&#32654;&#22909;',quote:'&#21644;&#20320;&#32842;&#22825;&#30340;&#26102;&#38388;&#65292;&#27704;&#36828;&#36807;&#24471;&#22826;&#24555;'},
-  {id:'ktv',emoji:'&#127926;',name:'KTV&#21809;&#27468;',desc:'&#19968;&#36215;&#24403;&#27468;&#29579;&#27468;&#21518;.&#21971;&#21809;',badge:{text:'&#127925; &#24320;&#24515;',c:'badge-new'},msg:'&#21809;&#19968;&#39318;&#24773;&#27468;&#32473;&#20320;&#21548;&#65292;&#27468;&#35789;&#37117;&#26159;&#25105;&#24819;&#23545;&#20320;&#35828;&#30340;&#35805;',quote:'&#20320;&#26159;&#25105;&#30340;&#20027;&#25171;&#27468;&#65292;&#24490;&#29615;&#25773;&#25918;&#19968;&#36744;&#23376;'},
-  {id:'trip',emoji:'&#127754;',name:'&#30701;&#36884;&#26053;&#34892;',desc:'&#21608;&#36793;&#22478;&#24066;.&#35828;&#36208;&#23601;&#36208;',badge:{text:'&#9992; &#28010;&#28459;',c:'badge-hot'},msg:'&#21644;&#20320;&#19968;&#36215;&#21435;&#30475;&#19981;&#19968;&#26679;&#30340;&#39118;&#26223;&#65292;&#27599;&#19968;&#24133;&#37117;&#26159;&#26368;&#32654;&#30340;&#22238;&#24518;',quote:'&#19990;&#30028;&#37027;&#20040;&#22823;&#65292;&#25105;&#24819;&#21644;&#20320;&#19968;&#36215;&#21435;&#30475;&#30475;'}
+const dateOptions = [
+  {id:'stayhome', emoji:'🏠', name:'宅家约会', desc:'窝在家看电影·做饭·打游戏', badge:{text:'💕 超温馨', c:'badge-hot'}, msg:'只要和你在一起，窝在家就是全世界最幸福的事', quote:'有你的地方，就是最好的约会地点'},
+  {id:'movie', emoji:'🎬', name:'看电影', desc:'最新大片·爆米花·可乐', badge:{text:'🔥 经典', c:'badge-hot'}, msg:'黑灯瞎火的电影院，最适合偷偷牵你的手了', quote:'电影好不好看不重要，重要的是身边的人是你'},
+  {id:'shopping', emoji:'🛍', name:'逛街购物', desc:'手牵手逛商场·买买买', badge:{text:'✨ 推荐', c:'badge-new'}, msg:'想给你买最好看的衣服，看你试穿时开心的样子', quote:'陪你逛街三小时不喊累，这就是真爱'},
+  {id:'dinner', emoji:'🍴', name:'吃大餐', desc:'浪漫餐厅·烛光晚餐', badge:{text:'👖 精致', c:'badge-hot'}, msg:'美食和爱情，都是这世上最治愈的东西', quote:'和你吃饭，每一顿都是烛光晚餐'},
+  {id:'amusement', emoji:'🎡', name:'游乐园', desc:'摩天轮·过山车·棉花糖', badge:{text:'🎲 刺激', c:'badge-new'}, msg:'在摩天轮最高点许愿，希望我们能一直在一起', quote:'坐过山车时抓紧我的手，一辈子不放开'},
+  {id:'park', emoji:'🌸', name:'公园散步', desc:'散步拍照·感受大自然', badge:{text:'🌱 惬意', c:'badge-calm'}, msg:'牵着你的手在公园里慢慢走，连风都是甜的', quote:'最美的风景不是花，是看花的你'},
+  {id:'games', emoji:'🎮', name:'打游戏', desc:'一起开黑·双人小游戏', badge:{text:'🎯 欢乐', c:'badge-new'}, msg:'赢了你夸我厉害，输了你笑我菜，怎样都开心', quote:'游戏可以输，但你不能输'},
+  {id:'tea', emoji:'☕', name:'下午茶', desc:'安静咖啡厅·甜品·聊天', badge:{text:'🍞 甜', c:'badge-calm'}, msg:'和你面对面坐着，什么也不说也觉得美好', quote:'和你聊天的时间，永远过得太快'},
+  {id:'ktv', emoji:'🎤', name:'KTV唱歌', desc:'一起当歌王歌后·嗨唱', badge:{text:'🎵 开心', c:'badge-new'}, msg:'唱一首情歌给你听，歌词都是我想对你说的话', quote:'你是我的主打歌，循环播放一辈子'},
+  {id:'trip', emoji:'🌊', name:'短途旅行', desc:'周边城市·说走就走', badge:{text:'✈ 浪漫', c:'badge-hot'}, msg:'和你一起去看不一样的风景，每一幅都是最美的回忆', quote:'世界那么大，我想和你一起去看看'}
 ];
 
-var activityMessages = {
-  stayhome:'&#20170;&#22825;&#23601;&#22312;&#23478;&#33104;&#22312;&#19968;&#36215;&#21543;~ &#25105;&#36127;&#36131;&#20570;&#39277;&#65292;&#20320;&#36127;&#36131;&#35828;&#29233;&#25105;',
-  movie:'&#29190;&#31859;&#33457;&#25105;&#20080;&#65292;&#31080;&#25105;&#20080;&#65292;&#20320;&#21482;&#36127;&#36131;&#38752;&#22312;&#25105;&#32937;&#33152;&#19978;',
-  shopping:'&#20170;&#22825;&#20320;&#24819;&#20080;&#20160;&#20040;&#25105;&#37117;&#38506;&#20320;&#65281;&#20320;&#36127;&#36131;&#32654;&#65292;&#25105;&#36127;&#36131;&#20080;&#21333;',
-  dinner:'&#23450;&#20102;&#20320;&#26368;&#21916;&#27426;&#30340;&#33756;&#21381;&#65292;&#20170;&#26202;&#21482;&#20934;&#36127;&#36131;&#21507;&#21644;&#31505;',
-  amusement:'&#22312;&#25705;&#22825;&#36718;&#26368;&#39640;&#28857;&#25105;&#20250;&#23545;&#20320;&#35828;&#19968;&#21477;&#35805;... &#20320;&#29468;&#26159;&#20160;&#20040;&#65311;',
-  park:'&#24102;&#20320;&#21435;&#19968;&#20010;&#36229;&#32654;&#30340;&#20844;&#22253;&#65292;&#20445;&#35777;&#20320;&#30127;&#29378;&#25293;&#29031;&#65281;',
-  games:'&#25105;&#20934;&#22791;&#22909;&#34987;&#20320;&#34384;&#20102;&#65281;&#19981;&#36807;&#36194;&#20102;&#30340;&#20154;&#35201;&#35831;&#21507;&#22812;&#23477;&#21734;',
-  tea:'&#25214;&#19968;&#23478;&#26377;&#29483;&#30340;&#21654;&#21857;&#21381;&#65292;&#36793;&#25619;&#29483;&#36793;&#30475;&#20320;&#65292;&#27835;&#24840;&#19968;&#25972;&#22825;',
-  ktv:'&#25105;&#35201;&#21809;&#12298;&#21578;&#30333;&#27668;&#29614;&#12299;&#32473;&#20320;&#21548;&#65281;&#20320;&#36127;&#36131;&#24403;&#25105;&#30340;&#26368;&#20339;&#21548;&#20247;',
-  trip:'&#25105;&#26469;&#20570;&#25915;&#30053;&#65292;&#20320;&#24102;&#19978;&#22909;&#24515;&#24773;&#65292;&#25105;&#20204;&#20986;&#21457;&#21543;&#65281;'
+const activityMessages = {
+  stayhome:'今天就在家腐败在一起吧~ 我负责做饭，你负责说爱我',
+  movie:'爆米花我买，票我买，你只负责靠在我肩膀上',
+  shopping:'今天你想买什么我都陪你！你负责美，我负责买单',
+  dinner:'订了你最喜欢的餐厅，今晚只准负责吃和笑',
+  amusement:'在摩天轮最高点我会对你说一句话... 你猜是什么？',
+  park:'带你去一个超美的公园，保证你疯狂拍照！',
+  games:'我准备好被你虐了！不过赢了的人要请吃夜宵哦',
+  tea:'找一家有猫的咖啡厅，边撸猫边看你，治愈一整天',
+  ktv:'我要唱《告白气球》给你听！你负责当我的最佳听众',
+  trip:'我来做攻略，你带上好心情，我们出发吧！'
 };
 
-var quotes = [
-'&#127803; &#21644;&#20320;&#22312;&#19968;&#36215;&#30340;&#27599;&#19968;&#22825;&#65292;&#37117;&#26159;&#26368;&#22909;&#30340;&#32422;&#20250;',
-'&#128149; &#24819;&#21644;&#20320;&#19968;&#36215;&#20570;&#24456;&#22810;&#24456;&#22810;&#26080;&#32842;&#30340;&#20107;',
-'&#10024; &#20320;&#26159;&#25105;&#24179;&#28129;&#29983;&#27963;&#37324;&#30340;&#20809;',
-'&#127800; &#21482;&#35201;&#26377;&#20320;&#22312;&#65292;&#21435;&#21738;&#37117;&#26159;&#34588;&#26376;&#26053;&#34892;',
-'&#128152; &#21644;&#20320;&#19968;&#36215;&#28010;&#36153;&#30340;&#26102;&#38388;&#65292;&#25165;&#26159;&#26368;&#29645;&#36149;&#30340;&#26102;&#20809;',
-'&#127775; &#20320;&#26159;&#25105;&#30340;&#12300;&#21018;&#21018;&#22909;&#12301;&#8212;&#8212;&#21018;&#22909;&#21916;&#27426;&#65292;&#21018;&#22909;&#21512;&#36866;',
-'&#128151; &#36935;&#35265;&#20320;&#20043;&#21518;&#65292;&#27599;&#22825;&#37117;&#24819;&#35848;&#24651;&#29233;',
-'&#127802; &#20320;&#30340;&#31505;&#23481;&#65292;&#26159;&#25105;&#36825;&#36744;&#23376;&#26368;&#24819;&#23432;&#25252;&#30340;&#19996;&#35199;',
-'&#129411; &#21916;&#27426;&#20320;&#36825;&#20214;&#20107;&#65292;&#25105;&#25171;&#31639;&#22362;&#25345;&#19968;&#36744;&#23376;',
-'&#10087; &#19990;&#30028;&#24456;&#22823;&#65292;&#20294;&#25105;&#30340;&#19990;&#30028;&#37324;&#26377;&#20320;&#23601;&#22815;&#20102;'
+const quotes = [
+  '🌹 和你在一起的每一天，都是最好的约会',
+  '💕 想和你一起做很多很多无聊的事',
+  '✨ 你是我平淡生活里的光',
+  '🌸 只要有你在，去哪都是蜜月旅行',
+  '💘 和你一起浪费的时间，才是最珍贵的时光',
+  '🌟 你是我的「刚刚好」——刚好喜欢，刚好合适',
+  '💓 遇见你之后，每天都想谈恋爱',
+  '🌊 你的笑容，是我这辈子最想守护的东西',
+  '💋 喜欢你这件事，我打算坚持一辈子的',
+  '💫 世界很大，但我的世界里有你就够了'
 ];
 
 function randomQuote() { return quotes[Math.floor(Math.random() * quotes.length)]; }
 
 function createFloatElements() {
-  var container = document.getElementById('floatContainer');
-  var items = ['&#128149;','&#10024;','&#127800;','&#128152;','&#127775;','&#128151;','&#127802;','&#129411;'];
-  for (var i = 0; i < 20; i++) {
-    var el = document.createElement('div');
+  const container = document.getElementById('floatContainer');
+  const items = ['💕','✨','🌸','💘','🌟','💓','🌊','💋'];
+  for (let i = 0; i < 20; i++) {
+    const el = document.createElement('div');
     el.className = 'float-item';
     el.textContent = items[i % items.length];
     el.style.left = Math.random() * 100 + '%';
@@ -377,119 +377,113 @@ createFloatElements();
 function getHistory() { try { return JSON.parse(localStorage.getItem('dateHistory') || '{}'); } catch(e) { return {}; } }
 
 function saveChoice(id, name) {
-  var h = getHistory();
-  if (!h[id]) h[id] = {name:name, count:0, lastDate:null};
-  h[id].count++; h[id].lastDate = new Date().toISOString();
+  const h = getHistory();
+  if (!h[id]) h[id] = {name, count: 0, lastDate: null};
+  h[id].count++;
+  h[id].lastDate = new Date().toISOString();
   localStorage.setItem('dateHistory', JSON.stringify(h));
-  localStorage.setItem('lastDate', JSON.stringify({id:id, name:name, time:new Date().toISOString()}));
+  localStorage.setItem('lastDate', JSON.stringify({id, name, time: new Date().toISOString()}));
 }
 
 function getLastDate() {
   try {
-    var last = JSON.parse(localStorage.getItem('lastDate'));
+    const last = JSON.parse(localStorage.getItem('lastDate'));
     if (last && last.name) {
-      var days = Math.floor((Date.now() - new Date(last.time)) / 86400000);
-      if (days === 0) return '&#21018;&#21018;&#36873;&#20102; ' + last.name + ' &#128149;';
-      if (days === 1) return '&#26152;&#22825;&#36873;&#20102; ' + last.name + ' &#128149;';
-      return days + ' &#22825;&#21069;&#36873;&#20102; ' + last.name;
+      const days = Math.floor((Date.now() - new Date(last.time)) / 86400000);
+      if (days === 0) return '刚刚选了 ' + last.name + ' 💕';
+      if (days === 1) return '昨天选了 ' + last.name + ' 💕';
+      return days + ' 天前选了 ' + last.name;
     }
   } catch(e) {}
-  return '&#36824;&#27809;&#26377;&#32422;&#20250;&#35760;&#24405;&#21734;~';
+  return '还没有约会记录哦~';
 }
 
 function getStats(id) {
-  var h = getHistory();
+  const h = getHistory();
   if (h[id] && h[id].count > 0) {
-    return '&#36825;&#26159;&#31532; ' + h[id].count + ' &#27425;&#36873;&#36825;&#20010;&#21862; ' + Array(Math.min(h[id].count,5)+1).join('&#128149;');
+    return '这是第 ' + h[id].count + ' 次选这个啦 ' + '💕'.repeat(Math.min(h[id].count, 5));
   }
-  return '&#31532;&#19968;&#27425;&#36873;&#36825;&#20010;&#21602;&#65281;&#10024;';
+  return '第一次选这个呢！✨';
 }
 
 function renderDates() {
-  var grid = document.getElementById('dateGrid');
+  const grid = document.getElementById('dateGrid');
   grid.innerHTML = '';
-  for (var i = 0; i < dateOptions.length; i++) {
-    var opt = dateOptions[i];
-    var card = document.createElement('div');
+  for (const opt of dateOptions) {
+    const card = document.createElement('div');
     card.className = 'date-card';
     card.innerHTML = '<span class="emoji">' + opt.emoji + '</span><div class="name">' + opt.name + '</div><div class="desc">' + opt.desc + '</div><span class="badge ' + opt.badge.c + '">' + opt.badge.text + '</span>';
-    (function(id) { card.addEventListener('click', function() { openModal(id); }); })(opt.id);
+    card.addEventListener('click', () => openModal(opt.id));
     grid.appendChild(card);
   }
 }
 renderDates();
-document.getElementById('lastDateText').innerHTML = getLastDate();
+document.getElementById('lastDateText').textContent = getLastDate();
 
-var currentId = null;
+let currentId = null;
 
 function openModal(id) {
   currentId = id;
-  for (var i = 0; i < dateOptions.length; i++) {
-    if (dateOptions[i].id === id) {
-      var opt = dateOptions[i];
-      document.getElementById('modalEmoji').innerHTML = opt.emoji;
-      document.getElementById('modalTitle').textContent = '&#30830;&#23450;&#36873;&#12302;' + opt.name + '&#12303;&#21527;&#65311;';
-      document.getElementById('modalSub').innerHTML = opt.msg;
-      document.getElementById('modalStats').innerHTML = getStats(id);
-      document.getElementById('modalOverlay').classList.add('show');
-      break;
-    }
-  }
+  const opt = dateOptions.find(o => o.id === id);
+  if (!opt) return;
+  document.getElementById('modalEmoji').textContent = opt.emoji;
+  document.getElementById('modalTitle').textContent = '确定选【' + opt.name + '】吗？';
+  document.getElementById('modalSub').textContent = opt.msg;
+  document.getElementById('modalStats').textContent = getStats(id);
+  document.getElementById('modalOverlay').classList.add('show');
 }
 
-function closeModal() { document.getElementById('modalOverlay').classList.remove('show'); currentId = null; }
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+  currentId = null;
+}
 
 function confirmChoice() {
   if (!currentId) return;
-  var opt = null;
-  for (var i = 0; i < dateOptions.length; i++) {
-    if (dateOptions[i].id === currentId) { opt = dateOptions[i]; break; }
-  }
+  const opt = dateOptions.find(o => o.id === currentId);
   if (!opt) return;
   saveChoice(currentId, opt.name);
   closeModal();
-  document.getElementById('resultEmoji').innerHTML = opt.emoji;
-  document.getElementById('resultTitle').textContent = '&#22826;&#22909;&#21862;&#65281;&#128149;';
-  document.getElementById('resultSub').textContent = '&#20170;&#22825;&#25105;&#20204;&#23601;&#21435;&#12302;' + opt.name + '&#12303;&#21543;&#65281;';
-  document.getElementById('resultMsg').innerHTML = activityMessages[currentId] || opt.msg;
+  document.getElementById('resultEmoji').textContent = opt.emoji;
+  document.getElementById('resultTitle').textContent = '太好啦！💕';
+  document.getElementById('resultSub').textContent = '今天我们就去【' + opt.name + '】吧！';
+  document.getElementById('resultMsg').textContent = activityMessages[currentId] || opt.msg;
   document.getElementById('resultOverlay').classList.add('show');
   launchConfetti();
-  document.getElementById('lastDateText').innerHTML = getLastDate();
-  document.getElementById('quoteBar').innerHTML = opt.quote || randomQuote();
+  document.getElementById('lastDateText').textContent = getLastDate();
+  document.getElementById('quoteBar').textContent = opt.quote || randomQuote();
   currentId = null;
 }
 
 function closeResult() {
   document.getElementById('resultOverlay').classList.remove('show');
-  document.getElementById('quoteBar').innerHTML = randomQuote();
+  document.getElementById('quoteBar').textContent = randomQuote();
 }
 
 function surpriseMe() {
-  var r = dateOptions[Math.floor(Math.random() * dateOptions.length)];
+  const r = dateOptions[Math.floor(Math.random() * dateOptions.length)];
   openModal(r.id);
 }
 
 function launchConfetti() {
-  var emojis = ['&#128149;','&#10024;','&#127800;','&#128152;','&#127775;','&#127881;','&#128151;','&#127802;','&#129411;','&#127882;'];
-  for (var i = 0; i < 40; i++) {
-    (function(idx) {
-      setTimeout(function() {
-        var el = document.createElement('div');
-        el.className = 'confetti';
-        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        el.style.left = Math.random() * 100 + 'vw';
-        el.style.fontSize = (14 + Math.random() * 24) + 'px';
-        el.style.animationDuration = (2 + Math.random() * 3) + 's';
-        document.body.appendChild(el);
-        setTimeout(function() { el.remove(); }, 5000);
-      }, idx * 60);
-    })(i);
+  const emojis = ['💕','✨','🌸','💘','🌟','🎉','💓','🌊','💋','🎊'];
+  for (let i = 0; i < 40; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = (14 + Math.random() * 24) + 'px';
+      el.style.animationDuration = (2 + Math.random() * 3) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }, i * 60);
   }
 }
 
-setInterval(function() {
-  var qb = document.getElementById('quoteBar');
-  if (qb) qb.innerHTML = randomQuote();
+setInterval(() => {
+  const qb = document.getElementById('quoteBar');
+  if (qb) qb.textContent = randomQuote();
 }, 30000);
 
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
