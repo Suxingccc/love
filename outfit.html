@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>👗 今日穿搭推荐</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #ffd6e0 0%, #ffc8d6 25%, #ffb3c6 50%, #ffd1dc 75%, #ffe4e9 100%);
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* 浮动爱心 */
+  .floating-hearts {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .heart {
+    position: absolute;
+    opacity: 0.3;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg) scale(1); opacity: 0.4; }
+    100% { transform: translateY(-100px) rotate(720deg) scale(0.5); opacity: 0; }
+  }
+
+  /* 主卡片 */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    border-radius: 32px;
+    padding: 32px 24px 36px;
+    max-width: 440px;
+    width: 92%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 80, 120, 0.25);
+    border: 2px solid rgba(255, 200, 215, 0.5);
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #d6336c;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #e8688a;
+    margin-bottom: 24px;
+  }
+
+  /* 步骤指示器 */
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f0d0da;
+    transition: all 0.4s ease;
+  }
+  .step-dot.active {
+    background: #d6336c;
+    transform: scale(1.3);
+    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.4);
+  }
+  .step-dot.done {
+    background: #ff8aaa;
+  }
+
+  /* 步骤面板 */
+  .step-panel {
+    display: none;
+    animation: fadeInUp 0.4s ease;
+  }
+  .step-panel.active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 20px;
+  }
+
+  /* 天气卡片 */
+  .weather-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .weather-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 14px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  .weather-card:hover {
+    transform: scale(1.04);
+    border-color: rgba(214, 51, 108, 0.3);
+  }
+  .weather-card.selected {
+    border-color: #d6336c;
+    background: rgba(255, 107, 138, 0.12);
+    box-shadow: 0 4px 16px rgba(255, 60, 100, 0.15);
+  }
+  .weather-emoji {
+    font-size: 32px;
+    margin-bottom: 4px;
+  }
+  .weather-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+  }
+
+  /* 温度选择 */
+  .temp-section {
+    margin-bottom: 20px;
+  }
+  .temp-label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .temp-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #6ec6ff, #ffd93d, #ff6b6b);
+    outline: none;
+  }
+  .temp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #d6336c;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.3);
+  }
+  .temp-display {
+    font-size: 28px;
+    font-weight: 700;
+    color: #d6336c;
+    margin-top: 8px;
+  }
+  .temp-range {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 4px;
+  }
+
+  /* 心情选择 */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .mood-card {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 16px 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  .mood-card:hover {
+    transform: scale(1.04);
+    border-color: rgba(214, 51, 108, 0.3);
+  }
+  .mood-card.selected {
+    border-color: #d6336c;
+    background: rgba(255, 107, 138, 0.12);
+    box-shadow: 0 4px 16px rgba(255, 60, 100, 0.15);
+  }
+  .mood-emoji {
+    font-size: 30px;
+    margin-bottom: 4px;
+  }
+  .mood-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+  }
+
+  /* 穿搭偏好选择 */
+  .pref-section {
+    margin-bottom: 18px;
+  }
+  .pref-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .pref-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pref-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid transparent;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .pref-btn:hover {
+    border-color: rgba(214, 51, 108, 0.3);
+    transform: scale(1.04);
+  }
+  .pref-btn.selected {
+    border-color: #d6336c;
+    background: rgba(255, 107, 138, 0.12);
+    color: #d6336c;
+  }
+
+  /* 按钮 */
+  .nav-btns {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    justify-content: center;
+  }
+  .btn-next {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 60, 100, 0.4);
+    transition: all 0.3s ease;
+  }
+  .btn-next:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(255, 60, 100, 0.5); }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-back {
+    background: rgba(255, 255, 255, 0.7);
+    color: #e8688a;
+    border: 2px solid #f0d0da;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-back:hover { border-color: #e8688a; background: rgba(232, 104, 138, 0.08); }
+
+  /* 结果页面 */
+  .result-outfit {
+    background: linear-gradient(135deg, rgba(255, 107, 138, 0.08), rgba(255, 200, 215, 0.15));
+    border-radius: 24px;
+    padding: 24px 16px;
+    margin-bottom: 16px;
+  }
+  .outfit-header {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d6336c;
+    margin-bottom: 16px;
+  }
+  .outfit-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    text-align: left;
+    border: 1.5px solid rgba(255, 200, 215, 0.4);
+    transition: transform 0.2s;
+  }
+  .outfit-item:hover {
+    transform: translateX(4px);
+  }
+  .outfit-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .icon-top { background: linear-gradient(135deg, #ff9671, #ffc75f); }
+  .icon-bottom { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+  .icon-shoes { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .icon-acc { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .icon-bag { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .icon-hair { background: linear-gradient(135deg, #fa709a, #fee140); }
+
+  .outfit-info { flex: 1; }
+  .outfit-type {
+    font-size: 12px;
+    color: #bbb;
+    margin-bottom: 2px;
+  }
+  .outfit-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+  }
+  .outfit-tip {
+    font-size: 12px;
+    color: #e8688a;
+    margin-top: 2px;
+  }
+
+  .love-tip {
+    background: rgba(255, 107, 138, 0.1);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    border: 1.5px dashed rgba(214, 51, 108, 0.3);
+  }
+  .love-tip-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #d6336c;
+    margin-bottom: 4px;
+  }
+  .love-tip-text {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  .summary-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .summary-tag {
+    background: rgba(255, 107, 138, 0.12);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    color: #d6336c;
+    font-weight: 600;
+  }
+
+  .btn-regen {
+    background: linear-gradient(135deg, #ff6b8a, #ff3b6f);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 60, 100, 0.4);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+  .btn-regen:hover { transform: scale(1.04); }
+
+  /* 加载动画 */
+  .loading {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0;
+  }
+  .loading.show { display: flex; }
+  .loading-emoji {
+    font-size: 48px;
+    animation: bounce 1s ease infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .loading-text {
+    font-size: 15px;
+    color: #e8688a;
+    margin-top: 16px;
+    animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* 自动定位按钮 */
+  .auto-locate {
+    background: none;
+    border: 1.5px dashed #e8688a;
+    color: #e8688a;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 14px;
+  }
+  .auto-locate:hover {
+    background: rgba(232, 104, 138, 0.1);
+    border-style: solid;
+  }
+  .auto-locate.loading-loc {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* 情侣配对提示 */
+  .couple-hint {
+    background: linear-gradient(135deg, rgba(255, 107, 138, 0.15), rgba(251, 194, 235, 0.2));
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(214, 51, 108, 0.2);
+    font-size: 13px;
+    color: #d6336c;
+    line-height: 1.6;
+  }
+  .couple-hint .hint-icon {
+    font-size: 18px;
+    margin-right: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-hearts" id="hearts"></div>
+
+<div class="card">
+  <div class="title">👗 今日穿搭推荐</div>
+  <div class="subtitle">宝贝今天穿什么？让我来帮你搭 💕</div>
+
+  <!-- 步骤指示器 -->
+  <div class="steps" id="steps">
+    <div class="step-dot active" data-step="0"></div>
+    <div class="step-dot" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+  </div>
+
+  <!-- Step 0: 天气 -->
+  <div class="step-panel active" id="step0">
+    <div class="step-title">🌤️ 今天天气怎么样？</div>
+    <div class="step-desc">选一个最接近的天气状况吧～</div>
+
+    <button class="auto-locate" id="autoLocate" onclick="autoDetectWeather()">📍 自动获取当地天气</button>
+
+    <div class="weather-grid" id="weatherGrid">
+      <div class="weather-card" data-weather="sunny" onclick="selectWeather(this)">
+        <div class="weather-emoji">☀️</div>
+        <div class="weather-name">晴天</div>
+      </div>
+      <div class="weather-card" data-weather="cloudy" onclick="selectWeather(this)">
+        <div class="weather-emoji">⛅</div>
+        <div class="weather-name">多云</div>
+      </div>
+      <div class="weather-card" data-weather="overcast" onclick="selectWeather(this)">
+        <div class="weather-emoji">☁️</div>
+        <div class="weather-name">阴天</div>
+      </div>
+      <div class="weather-card" data-weather="rainy" onclick="selectWeather(this)">
+        <div class="weather-emoji">🌧️</div>
+        <div class="weather-name">下雨</div>
+      </div>
+      <div class="weather-card" data-weather="snowy" onclick="selectWeather(this)">
+        <div class="weather-emoji">❄️</div>
+        <div class="weather-name">下雪</div>
+      </div>
+      <div class="weather-card" data-weather="windy" onclick="selectWeather(this)">
+        <div class="weather-emoji">💨</div>
+        <div class="weather-name">大风</div>
+      </div>
+    </div>
+
+    <div class="temp-section">
+      <div class="temp-label">🌡️ 大概多少度？</div>
+      <input type="range" class="temp-slider" id="tempSlider" min="-10" max="40" value="22" oninput="updateTemp()">
+      <div class="temp-display" id="tempDisplay">22°C</div>
+      <div class="temp-range">
+        <span>❄️ -10°C</span>
+        <span>🔥 40°C</span>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-next" id="btn0" onclick="nextStep()" disabled>下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 1: 心情 -->
+  <div class="step-panel" id="step1">
+    <div class="step-title">💭 今天心情如何？</div>
+    <div class="step-desc">穿搭要配心情才对味～</div>
+
+    <div class="mood-grid">
+      <div class="mood-card" data-mood="happy" onclick="selectMood(this)">
+        <div class="mood-emoji">😊</div>
+        <div class="mood-name">开心</div>
+      </div>
+      <div class="mood-card" data-mood="romantic" onclick="selectMood(this)">
+        <div class="mood-emoji">🥰</div>
+        <div class="mood-name">浪漫</div>
+      </div>
+      <div class="mood-card" data-mood="cool" onclick="selectMood(this)">
+        <div class="mood-emoji">😎</div>
+        <div class="mood-name">酷酷的</div>
+      </div>
+      <div class="mood-card" data-mood="lazy" onclick="selectMood(this)">
+        <div class="mood-emoji">😴</div>
+        <div class="mood-name">慵懒</div>
+      </div>
+      <div class="mood-card" data-mood="energetic" onclick="selectMood(this)">
+        <div class="mood-emoji">⚡</div>
+        <div class="mood-name">元气满满</div>
+      </div>
+      <div class="mood-card" data-mood="elegant" onclick="selectMood(this)">
+        <div class="mood-emoji">✨</div>
+        <div class="mood-name">优雅</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="prevStep()">← 上一步</button>
+      <button class="btn-next" id="btn1" onclick="nextStep()" disabled>下一步 →</button>
+    </div>
+  </div>
+
+  <!-- Step 2: 穿搭偏好 -->
+  <div class="step-panel" id="step2">
+    <div class="step-title">🎨 想穿什么风格？</div>
+    <div class="step-desc">告诉我你的偏好，搭配更精准～</div>
+
+    <div class="pref-section">
+      <div class="pref-label">🌈 色调偏好</div>
+      <div class="pref-options" id="colorPref">
+        <div class="pref-btn" data-pref="light" onclick="selectPref('color', this)">☀️ 亮色系</div>
+        <div class="pref-btn" data-pref="dark" onclick="selectPref('color', this)">🌙 暗色系</div>
+        <div class="pref-btn" data-pref="pastel" onclick="selectPref('color', this)">🌸 马卡龙色</div>
+        <div class="pref-btn" data-pref="any" onclick="selectPref('color', this)">🤷 都可以</div>
+      </div>
+    </div>
+
+    <div class="pref-section">
+      <div class="pref-label">👗 下装偏好</div>
+      <div class="pref-options" id="bottomPref">
+        <div class="pref-btn" data-pref="skirt" onclick="selectPref('bottom', this)">👗 裙子</div>
+        <div class="pref-btn" data-pref="pants" onclick="selectPref('bottom', this)">👖 裤子</div>
+        <div class="pref-btn" data-pref="shorts" onclick="selectPref('bottom', this)">🩳 短裤</div>
+        <div class="pref-btn" data-pref="any" onclick="selectPref('bottom', this)">🤷 都可以</div>
+      </div>
+    </div>
+
+    <div class="pref-section">
+      <div class="pref-label">👟 鞋子偏好</div>
+      <div class="pref-options" id="shoePref">
+        <div class="pref-btn" data-pref="sneakers" onclick="selectPref('shoe', this)">👟 运动鞋</div>
+        <div class="pref-btn" data-pref="heels" onclick="selectPref('shoe', this)">👠 高跟鞋</div>
+        <div class="pref-btn" data-pref="flats" onclick="selectPref('shoe', this)">🩰 平底鞋</div>
+        <div class="pref-btn" data-pref="boots" onclick="selectPref('shoe', this)">🥾 靴子</div>
+        <div class="pref-btn" data-pref="any" onclick="selectPref('shoe', this)">🤷 都可以</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="prevStep()">← 上一步</button>
+      <button class="btn-next" id="btn2" onclick="generateOutfit()">✨ 生成穿搭 →</button>
+    </div>
+  </div>
+
+  <!-- Step 3: 结果 -->
+  <div class="step-panel" id="step3">
+    <div class="loading" id="loading">
+      <div class="loading-emoji">👗</div>
+      <div class="loading-text">正在为你精心搭配中…💕</div>
+    </div>
+
+    <div id="resultContent" style="display:none;">
+      <div class="summary-bar" id="summaryBar"></div>
+
+      <div class="couple-hint" id="coupleHint">
+        <span class="hint-icon">💑</span>
+        <span id="coupleHintText"></span>
+      </div>
+
+      <div class="result-outfit" id="outfitResult"></div>
+
+      <div class="love-tip" id="loveTip">
+        <div class="love-tip-title">💕 穿搭小贴士</div>
+        <div class="love-tip-text" id="loveTipText"></div>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn-back" onclick="goToStep(2)">← 重新选择</button>
+        <button class="btn-regen" onclick="regenerate()">🔄 换一套</button>
+      </div>
+    </div>
+  </div>
+
+  <a href="index.html" style="display:inline-block; margin-top:18px; color:#e8688a; text-decoration:none; font-size:14px; padding:8px 20px; border:1.5px dashed #e8688a; border-radius:20px;">❤️ 返回首页</a>
+</div>
+
+<script>
+  // ===== 状态管理 =====
+  let currentStep = 0;
+  const state = {
+    weather: null,
+    temp: 22,
+    mood: null,
+    colorPref: null,
+    bottomPref: null,
+    shoePref: null,
+  };
+
+  // ===== 穿搭数据库 =====
+  const OUTFIT_DB = {
+    tops: {
+      light: {
+        sunny: ['白色碎花雪纺衫', '浅粉色泡泡袖上衣', '奶白色法式小衫', '鹅黄V领针织衫', '浅蓝条纹衬衫', '米白色蕾丝上衣'],
+        cloudy: ['浅杏色针织开衫', '奶白色宽松卫衣', '淡粉色薄毛衣', '米色小香风外套', '浅灰粉西装外套', '奶咖色短款毛衣'],
+        overcast: ['米白色长袖衬衫', '浅灰色薄卫衣', '奶杏色针织衫', '浅粉长袖T恤', '燕麦色高领打底', '浅卡其风衣内搭白T'],
+        rainy: ['浅色防水冲锋衣', '奶白薄款风衣', '浅粉长袖内搭+外套', '米色针织衫+浅色雨衣', '浅灰连帽卫衣', '奶白衬衫+浅色开衫'],
+        snowy: ['浅粉色厚毛衣', '奶白色加绒卫衣', '米色高领打底衫', '浅杏色羽绒内搭', '白色毛绒上衣', '浅灰厚针织衫'],
+        windy: ['浅色防风外套', '奶白衬衫+针织背心', '浅粉风衣', '米色卫衣+浅色夹克', '浅灰长袖+马甲', '淡黄防风衣'],
+      },
+      dark: {
+        sunny: ['黑色吊带背心', '深蓝修身T恤', '黑色方领上衣', '深灰短袖衬衫', '藏蓝一字肩', '黑色蕾丝上衣'],
+        cloudy: ['深灰色针织衫', '黑色小西装', '藏蓝色卫衣', '深棕色衬衫', '黑色高领打底', '深绿薄毛衣'],
+        overcast: ['黑色长袖T恤', '深灰卫衣', '藏蓝衬衫', '黑色打底+深色开衫', '深棕针织衫', '墨绿长袖上衣'],
+        rainy: ['黑色防水外套', '深灰连帽卫衣', '藏蓝风衣', '黑色皮衣', '深色冲锋衣', '黑色针织+深色外套'],
+        snowy: ['黑色厚毛衣', '深灰加绒卫衣', '藏蓝高领衫', '黑色羽绒内搭', '深棕厚针织', '墨绿加绒上衣'],
+        windy: ['黑色防风夹克', '深灰卫衣+皮衣', '藏蓝风衣', '黑色长袖+马甲', '深色牛仔外套', '黑色冲锋衣'],
+      },
+      pastel: {
+        sunny: ['薰衣草紫雪纺衫', '薄荷绿泡泡袖', '蜜桃粉法式上衣', '婴儿蓝V领衫', '淡紫针织短袖', '樱花粉蕾丝上衣'],
+        cloudy: ['淡紫针织开衫', '薄荷绿薄卫衣', '蜜桃粉毛衣', '婴儿蓝小香风', '淡粉西装外套', '浅紫宽松针织'],
+        overcast: ['薰衣草紫长袖', '薄荷绿衬衫', '蜜桃粉针织衫', '婴儿蓝高领', '淡紫卫衣', '浅粉长袖T恤'],
+        rainy: ['淡紫防水外套', '薄荷绿连帽衫', '蜜桃粉风衣', '婴儿蓝针织+外套', '浅紫冲锋衣', '淡粉卫衣+开衫'],
+        snowy: ['薰衣草紫厚毛衣', '薄荷绿加绒卫衣', '蜜桃粉高领衫', '婴儿蓝羽绒内搭', '淡紫毛绒上衣', '浅粉厚针织'],
+        windy: ['淡紫防风衣', '薄荷绿卫衣+马甲', '蜜桃粉风衣', '婴儿蓝夹克', '浅紫衬衫+针织', '淡粉防风外套'],
+      },
+      any: {
+        sunny: ['白色碎花雪纺衫', '黑色方领上衣', '薰衣草紫泡泡袖', '浅粉法式小衫', '深蓝修身T恤', '薄荷绿V领衫'],
+        cloudy: ['浅杏色针织开衫', '深灰卫衣', '淡紫小香风', '黑色小西装', '奶白薄毛衣', '藏蓝衬衫'],
+        overcast: ['米白长袖衬衫', '深灰卫衣', '薰衣草紫针织', '黑色高领', '浅粉长袖T恤', '藏蓝衬衫'],
+        rainy: ['浅色防水外套', '黑色冲锋衣', '淡紫连帽衫', '深灰卫衣', '奶白风衣', '藏蓝针织+外套'],
+        snowy: ['浅粉厚毛衣', '黑色加绒卫衣', '薰衣草紫高领', '深灰厚针织', '奶白羽绒内搭', '藏蓝加绒衫'],
+        windy: ['浅色防风衣', '黑色夹克', '淡紫风衣', '深灰卫衣+马甲', '奶白衬衫+背心', '藏蓝防风衣'],
+      }
+    },
+    bottoms: {
+      skirt: {
+        hot: ['白色A字短裙', '牛仔迷你裙', '碎花半身裙', '粉色百褶裙', '黑色包臀裙', '格纹短裙'],
+        warm: ['米色中长裙', '浅粉半身裙', '牛仔A字裙', '卡其色伞裙', '黑色中裙', '碎花长裙'],
+        mild: ['针织半身裙', '毛呢A字裙', '格纹中长裙', '丝绒半裙', '灯芯绒长裙', '皮质半裙'],
+        cold: ['加绒针织裙', '毛呢长裙', '丝绒半身裙', '灯芯绒中裙', '厚款百褶裙', '加绒A字裙'],
+      },
+      pants: {
+        hot: ['白色阔腿裤', '浅色牛仔短裤', '卡其色七分裤', '黑色薄款西裤', '浅粉休闲裤', '米色亚麻裤'],
+        warm: ['浅色直筒牛仔裤', '卡其色阔腿裤', '黑色烟管裤', '米色休闲裤', '深蓝微喇裤', '白色西裤'],
+        mild: ['深色直筒牛仔裤', '黑色小脚裤', '卡其色工装裤', '灰色阔腿裤', '灯芯绒直筒裤', '深棕西裤'],
+        cold: ['加绒黑色小脚裤', '深色直筒牛仔裤', '灰色毛呢裤', '加绒阔腿裤', '深棕灯芯绒裤', '黑色加绒西裤'],
+      },
+      shorts: {
+        hot: ['白色短裤', '牛仔热裤', '卡其色短裤', '粉色休闲短裤', '黑色短裤', '格纹短裤'],
+        warm: ['牛仔短裤', '卡其色百慕大', '黑色休闲短裤', '米色短裤', '深色工装短裤', '浅粉短裤'],
+        mild: ['加绒牛仔短裤+打底裤', '毛呢短裤', '灯芯绒短裤', '针织短裤', '皮质短裤', '格纹短裤+打底'],
+        cold: ['加绒短裤+厚打底裤', '毛呢短裤+加绒打底', '灯芯绒短裤+保暖', '针织短裤+厚袜', '不建议穿短裤哦～换裤子吧', '加绒短裤+加厚打底裤'],
+      },
+      any: {
+        hot: ['白色A字短裙', '浅色牛仔短裤', '卡其色阔腿裤', '碎花半身裙', '黑色薄款西裤', '粉色百褶裙'],
+        warm: ['米色中长裙', '浅色直筒牛仔裤', '卡其色阔腿裤', '浅粉半身裙', '黑色烟管裤', '牛仔A字裙'],
+        mild: ['针织半身裙', '深色直筒牛仔裤', '黑色小脚裤', '毛呢A字裙', '灰色阔腿裤', '灯芯绒直筒裤'],
+        cold: ['加绒针织裙', '加绒黑色小脚裤', '毛呢长裙', '深色直筒牛仔裤', '灰色毛呢裤', '加绒阔腿裤'],
+      }
+    },
+    shoes: {
+      sneakers: {
+        hot: ['白色老爹鞋', '浅色帆布鞋', '粉色运动鞋', '米色板鞋', '白色厚底鞋', '浅蓝跑鞋'],
+        warm: ['白色运动鞋', '米色老爹鞋', '浅粉板鞋', '灰色跑鞋', '奶白帆布鞋', '浅色休闲鞋'],
+        mild: ['白色运动鞋', '深色板鞋', '灰色跑鞋', '黑色休闲鞋', '米色老爹鞋', '浅色帆布鞋'],
+        cold: ['加绒运动鞋', '深色厚底鞋', '黑色跑鞋', '灰色加绒板鞋', '深色休闲鞋', '加绒老爹鞋'],
+      },
+      heels: {
+        hot: ['白色细跟凉鞋', '裸色猫跟鞋', '粉色一字带', '米色方跟凉鞋', '浅色粗跟', '银色细跟'],
+        warm: ['裸色尖头高跟鞋', '黑色猫跟鞋', '米色粗跟鞋', '粉色玛丽珍', '浅灰细跟', '奶白方跟'],
+        mild: ['黑色尖头高跟鞋', '酒红粗跟鞋', '裸色短靴跟', '深灰猫跟', '棕色方跟', '墨绿玛丽珍'],
+        cold: ['黑色加绒高跟靴', '深棕粗跟短靴', '酒红过膝靴', '灰色切尔西靴', '深色粗跟及踝靴', '黑色尖头及踝靴'],
+      },
+      flats: {
+        hot: ['白色芭蕾平底鞋', '米色乐福鞋', '粉色穆勒鞋', '浅色凉拖', '裸色平底鞋', '浅蓝帆布鞋'],
+        warm: ['米色芭蕾鞋', '黑色乐福鞋', '浅粉穆勒鞋', '奶白平底鞋', '灰色一脚蹬', '棕色牛津鞋'],
+        mild: ['黑色芭蕾鞋', '深棕乐福鞋', '灰色牛津鞋', '酒红玛丽珍', '深色穆勒鞋', '卡其一脚蹬'],
+        cold: ['加绒平底短靴', '深色切尔西靴', '加绒乐福鞋', '黑色及踝靴', '棕色马丁靴', '加绒牛津鞋'],
+      },
+      boots: {
+        hot: ['不建议穿靴子啦～', '浅色短靴（空调房）', '薄款及踝靴', '浅色马丁靴', '白色短靴', '凉靴'],
+        warm: ['浅色马丁靴', '米色及踝靴', '棕色切尔西靴', '黑色短靴', '奶白方头靴', '浅灰中筒靴'],
+        mild: ['黑色马丁靴', '棕色切尔西靴', '深色中筒靴', '灰色及踝靴', '酒红短靴', '卡其骑士靴'],
+        cold: ['黑色加绒马丁靴', '深棕过膝靴', '灰色加绒中筒靴', '酒红加绒短靴', '黑色雪地靴', '深色加绒切尔西靴'],
+      },
+      any: {
+        hot: ['白色老爹鞋', '裸色猫跟鞋', '米色乐福鞋', '粉色运动鞋', '白色芭蕾鞋', '浅色帆布鞋'],
+        warm: ['白色运动鞋', '黑色猫跟鞋', '米色芭蕾鞋', '浅粉板鞋', '棕色乐福鞋', '奶白穆勒鞋'],
+        mild: ['黑色马丁靴', '深色板鞋', '裸色短靴跟', '灰色跑鞋', '黑色乐福鞋', '酒红玛丽珍'],
+        cold: ['黑色加绒马丁靴', '深棕过膝靴', '加绒平底短靴', '灰色加绒板鞋', '黑色雪地靴', '深色切尔西靴'],
+      }
+    },
+    accessories: {
+      sunny: ['遮阳帽 + 墨镜', '丝巾 + 草编包', '珍珠耳环 + 链条包', '发带 + 帆布包', '太阳镜 + 丝巾发带', '编织手提包 + 宽檐帽'],
+      cloudy: ['贝雷帽 + 小方包', '丝巾 + 托特包', '耳环 + 链条包', '发箍 + 斜挎包', '围巾 + 手提包', '发夹 + 迷你包'],
+      overcast: ['丝巾 + 大托特包', '贝雷帽 + 斜挎包', '耳钉 + 手提包', '发带 + 帆布包', '围巾 + 小方包', '发箍 + 链条包'],
+      rainy: ['透明雨伞 + 防水包', '雨衣 + 斜挎包', '帽子 + 防水托特', '丝巾 + 小方包', '发夹 + 防水包', '折叠伞 + 链条包'],
+      snowy: ['毛线帽 + 羊绒围巾', '耳罩 + 保温杯', '毛线手套 + 大包', '围巾 + 手提包', '毛线帽 + 斜挎包', '手套 + 贝雷帽'],
+      windy: ['防风帽 + 大托特包', '丝巾固定发 + 斜挎包', '发夹 + 小方包', '帽子 + 防风夹', '围巾 + 手提包', '发带 + 链条包'],
+    },
+    hairstyles: {
+      happy: ['高马尾 + 蝴蝶结', '双麻花辫', '半扎发 + 发夹', '丸子头', '蓬松低马尾', '双丸子头'],
+      romantic: ['微卷披肩发', '低盘发 + 珍珠发夹', '侧编发', '法式慵懒卷', '半扎发 + 丝带', '低马尾 + 蕾丝发带'],
+      cool: ['高马尾', '利落低马尾', '短发微卷', '大背头', '编发马尾', '利落盘发'],
+      lazy: ['随意低丸子头', '松散低马尾', '自然披发', '懒人半扎发', '帽子遮一切', '简单夹子固定'],
+      energetic: ['高马尾 + 亮色发圈', '双马尾', '活力丸子头', '编发 + 发带', '高扎半丸子', '活力双辫'],
+      elegant: ['低盘发 + 发簪', '法式低马尾', '优雅侧编发', '丝绒发带低盘', '珍珠夹低盘', '微卷低扎发'],
+    },
+    coupleTips: {
+      sunny: '今天阳光正好，可以和男朋友穿情侣色系出门拍照哦～他穿白T你穿白裙，绝配！📸',
+      cloudy: '多云天气适合温柔色系穿搭，和男朋友来个奶茶色情侣装吧～🧋',
+      overcast: '阴天也可以很出彩！穿亮色点亮心情，和男朋友来个撞色情侣搭配～🎨',
+      rainy: '下雨天记得带伞～可以和男朋友共撑一把伞，浪漫满分！🌂💕',
+      snowy: '下雪天穿暖和最重要！和男朋友一起戴情侣毛线帽，又暖又甜～⛄❤️',
+      windy: '风大记得固定好发型！和男朋友一起穿防风外套出门，帅气情侣装～🌬️',
+    },
+    moodTips: {
+      happy: '开心的时候穿什么都好看！选亮色更能传递好心情～✨',
+      romantic: '浪漫心情配温柔穿搭，今天就是你的主场～🌹',
+      cool: '酷酷的你，穿搭也要有态度！简约利落最加分～🖤',
+      lazy: '慵懒也是一种风格，舒适自在最重要～🛋️',
+      energetic: '元气满满的日子，活力穿搭让你更闪耀！⚡',
+      elegant: '优雅永不过时，今天做个精致女孩～💎',
+    }
+  };
+
+  // ===== 交互逻辑 =====
+  function selectWeather(el) {
+    document.querySelectorAll('.weather-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.weather = el.dataset.weather;
+    document.getElementById('btn0').disabled = false;
+  }
+
+  function updateTemp() {
+    const val = document.getElementById('tempSlider').value;
+    state.temp = parseInt(val);
+    document.getElementById('tempDisplay').textContent = val + '°C';
+  }
+
+  function selectMood(el) {
+    document.querySelectorAll('.mood-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.mood = el.dataset.mood;
+    document.getElementById('btn1').disabled = false;
+  }
+
+  function selectPref(type, el) {
+    const container = el.parentElement;
+    container.querySelectorAll('.pref-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    state[type + 'Pref'] = el.dataset.pref;
+  }
+
+  function getTempLevel() {
+    if (state.temp >= 28) return 'hot';
+    if (state.temp >= 18) return 'warm';
+    if (state.temp >= 8) return 'mild';
+    return 'cold';
+  }
+
+  function nextStep() {
+    goToStep(currentStep + 1);
+  }
+
+  function prevStep() {
+    goToStep(currentStep - 1);
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.step-dot').forEach(d => {
+      d.classList.remove('active', 'done');
+    });
+    document.getElementById('step' + step).classList.add('active');
+    for (let i = 0; i < 4; i++) {
+      const dot = document.querySelector(`.step-dot[data-step="${i}"]`);
+      if (i < step) dot.classList.add('done');
+      if (i === step) dot.classList.add('active');
+    }
+    currentStep = step;
+  }
+
+  function pick(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function generateOutfit() {
+    goToStep(3);
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('resultContent');
+    loading.classList.add('show');
+    result.style.display = 'none';
+
+    setTimeout(() => {
+      renderResult();
+      loading.classList.remove('show');
+      result.style.display = 'block';
+    }, 1800);
+  }
+
+  function renderResult() {
+    const w = state.weather;
+    const t = getTempLevel();
+    const m = state.mood;
+    const cp = state.colorPref || 'any';
+    const bp = state.bottomPref || 'any';
+    const sp = state.shoePref || 'any';
+
+    // 获取各部位推荐
+    const top = pick(OUTFIT_DB.tops[cp][w]);
+    const bottom = pick(OUTFIT_DB.bottoms[bp][t]);
+    const shoes = pick(OUTFIT_DB.shoes[sp][t]);
+    const acc = pick(OUTFIT_DB.accessories[w]);
+    const hair = pick(OUTFIT_DB.hairstyles[m]);
+
+    // 渲染摘要标签
+    const weatherNames = { sunny: '☀️ 晴天', cloudy: '⛅ 多云', overcast: '☁️ 阴天', rainy: '🌧️ 下雨', snowy: '❄️ 下雪', windy: '💨 大风' };
+    const moodNames = { happy: '😊 开心', romantic: '🥰 浪漫', cool: '😎 酷酷的', lazy: '😴 慵懒', energetic: '⚡ 元气满满', elegant: '✨ 优雅' };
+    document.getElementById('summaryBar').innerHTML = `
+      <span class="summary-tag">${weatherNames[w]}</span>
+      <span class="summary-tag">🌡️ ${state.temp}°C</span>
+      <span class="summary-tag">${moodNames[m]}</span>
+    `;
+
+    // 情侣提示
+    document.getElementById('coupleHintText').textContent = OUTFIT_DB.coupleTips[w];
+
+    // 渲染穿搭卡片
+    document.getElementById('outfitResult').innerHTML = `
+      <div class="outfit-header">💕 今日穿搭方案</div>
+      <div class="outfit-item">
+        <div class="outfit-icon icon-top">👚</div>
+        <div class="outfit-info">
+          <div class="outfit-type">上装</div>
+          <div class="outfit-name">${top}</div>
+        </div>
+      </div>
+      <div class="outfit-item">
+        <div class="outfit-icon icon-bottom">👗</div>
+        <div class="outfit-info">
+          <div class="outfit-type">下装</div>
+          <div class="outfit-name">${bottom}</div>
+        </div>
+      </div>
+      <div class="outfit-item">
+        <div class="outfit-icon icon-shoes">👟</div>
+        <div class="outfit-info">
+          <div class="outfit-type">鞋子</div>
+          <div class="outfit-name">${shoes}</div>
+        </div>
+      </div>
+      <div class="outfit-item">
+        <div class="outfit-icon icon-acc">💍</div>
+        <div class="outfit-info">
+          <div class="outfit-type">配饰</div>
+          <div class="outfit-name">${acc}</div>
+        </div>
+      </div>
+      <div class="outfit-item">
+        <div class="outfit-icon icon-hair">💇‍♀️</div>
+        <div class="outfit-info">
+          <div class="outfit-type">发型</div>
+          <div class="outfit-name">${hair}</div>
+        </div>
+      </div>
+    `;
+
+    // 穿搭小贴士
+    document.getElementById('loveTipText').textContent = OUTFIT_DB.moodTips[m] + ' ' + OUTFIT_DB.coupleTips[w];
+  }
+
+  function regenerate() {
+    renderResult();
+  }
+
+  // ===== 自动天气检测 =====
+  async function autoDetectWeather() {
+    const btn = document.getElementById('autoLocate');
+    btn.classList.add('loading-loc');
+    btn.textContent = '📍 定位中...';
+
+    try {
+      // 获取位置
+      const pos = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 });
+      });
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      // 获取天气 (Open-Meteo 免费 API，无需 key)
+      const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`);
+      const data = await resp.json();
+
+      const temp = Math.round(data.current.temperature_2m);
+      const code = data.current.weather_code;
+      const wind = data.current.wind_speed_10m;
+
+      // WMO 天气代码映射
+      let weather = 'cloudy';
+      if (code === 0) weather = 'sunny';
+      else if (code <= 3) weather = 'cloudy';
+      else if (code <= 48) weather = 'overcast';
+      else if (code <= 67) weather = 'rainy';
+      else if (code <= 77) weather = 'snowy';
+      else if (code <= 82) weather = 'rainy';
+      else if (wind > 30) weather = 'windy';
+
+      // 更新UI
+      document.getElementById('tempSlider').value = temp;
+      updateTemp();
+
+      document.querySelectorAll('.weather-card').forEach(c => {
+        c.classList.remove('selected');
+        if (c.dataset.weather === weather) c.classList.add('selected');
+      });
+      state.weather = weather;
+      document.getElementById('btn0').disabled = false;
+
+      btn.textContent = '✅ 已获取！';
+      setTimeout(() => {
+        btn.textContent = '📍 自动获取当地天气';
+        btn.classList.remove('loading-loc');
+      }, 2000);
+
+    } catch (e) {
+      btn.textContent = '❌ 定位失败，请手动选择';
+      btn.classList.remove('loading-loc');
+      setTimeout(() => {
+        btn.textContent = '📍 自动获取当地天气';
+      }, 2000);
+    }
+  }
+
+  // ===== 背景爱心 =====
+  function createHearts() {
+    const container = document.getElementById('hearts');
+    const emojis = ['❤️', '💕', '💗', '💖', '🌸', '🌹', '✨', '💝', '👗', '👠', '💍'];
+    for (let i = 0; i < 22; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart';
+      el.textContent = emojis[i % emojis.length];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.fontSize = (12 + Math.random() * 18) + 'px';
+      el.style.animationDuration = (10 + Math.random() * 15) + 's';
+      el.style.animationDelay = (Math.random() * 20) + 's';
+      container.appendChild(el);
+    }
+  }
+
+  createHearts();
+</script>
+</body>
+</html>
